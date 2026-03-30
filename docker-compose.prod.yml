@@ -22,6 +22,7 @@ services:
       - FRONTEND_URL=https://${DOMAIN}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - CORS_ORIGINS=https://${DOMAIN}
     volumes:
       - upload_data:/app/uploads
 
