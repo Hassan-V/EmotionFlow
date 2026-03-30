@@ -57,6 +57,7 @@ services:
       dockerfile: Dockerfile
       args:
         - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+        - NEXT_PUBLIC_API_URL=https://${DOMAIN}/api-backend
     container_name: emotionflow-frontend
     environment:
       - NEXT_PUBLIC_API_URL=https://${DOMAIN}/api-backend
