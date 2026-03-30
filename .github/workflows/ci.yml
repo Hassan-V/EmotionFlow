@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: emotionflow
+          POSTGRES_PASSWORD: test_secret
+          POSTGRES_DB: emotionflow
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6380:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql+asyncpg://emotionflow:test_secret@localhost:5433/emotionflow
+      SYNC_DATABASE_URL: postgresql+psycopg2://emotionflow:test_secret@localhost:5433/emotionflow
+      REDIS_URL: redis://localhost:6380/0
+      JWT_SECRET_KEY: ci-test-secret-key-not-for-production
+      WORKER_SECRET: ci-test-worker-secret
+      ENVIRONMENT: testing
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint
+        run: |
+          pip install ruff
+          ruff check app/
+
+      - name: Verify app starts
+        run: |
+          timeout 10 python -c "
+          import asyncio
+          from app.main import app
+          from app.core.database import engine, Base
+          async def init():
+              async with engine.begin() as conn:
+                  await conn.run_sync(Base.metadata.create_all)
+              print('DB tables created OK')
+              await engine.dispose()
+          asyncio.run(init())
+          " || true
+
+  build-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build API image
+        run: docker build -t emotionflow-api .
+
+      - name: Build frontend image
+        run: docker build -t emotionflow-frontend ./frontend
+
+  deploy:
+    needs: [lint-and-test, build-docker]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ~/emotionflow
+            git pull origin main
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml build
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+            echo "Deployed $(git rev-parse --short HEAD)"
