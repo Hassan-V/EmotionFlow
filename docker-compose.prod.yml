@@ -1,0 +1,82 @@
+# Production monolith compose — VPS deployment
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Hybrid worker deployment:
+#   On your LAN machine (RTX 5070), set in worker's .env:
+#     REDIS_URL=redis://<tailscale-vps-ip>:6380/0
+#     SYNC_DATABASE_URL=postgresql+psycopg2://emotionflow:emotionflow_secret@<tailscale-vps-ip>:5433/emotionflow
+#   Then: docker compose -f docker-compose.worker.yml up -d
+
+services:
+  # Override: don't expose API directly in prod — Nginx handles it
+  api:
+    ports: []
+    environment:
+      - ENVIRONMENT=production
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - DATABASE_URL=postgresql+asyncpg://emotionflow:${DB_PASSWORD}@postgres:5432/emotionflow
+      - SYNC_DATABASE_URL=postgresql+psycopg2://emotionflow:${DB_PASSWORD}@postgres:5432/emotionflow
+    volumes:
+      - upload_data:/app/uploads
+
+  # Override: remove worker from VPS in hybrid mode (runs on LAN GPU)
+  worker:
+    profiles:
+      - local-worker   # only start if explicitly requested
+
+  postgres:
+    ports:
+      - "5433:5432"  # keep for Tailscale worker access
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+  redis:
+    ports:
+      - "6380:6379"  # keep for Tailscale worker access
+
+  # Next.js frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: emotionflow-frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=https://${DOMAIN}/api-backend
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - emotionflow-net
+    depends_on:
+      - api
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: emotionflow-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+      - certbot_www:/var/www/certbot:ro
+    depends_on:
+      - api
+      - frontend
+    restart: unless-stopped
+    networks:
+      - emotionflow-net
+
+  # Certbot for Let's Encrypt
+  certbot:
+    image: certbot/certbot
+    container_name: emotionflow-certbot
+    volumes:
+      - ./nginx/certs:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done"
+    restart: unless-stopped
+
+volumes:
+  certbot_www:

@@ -1,0 +1,50 @@
+{
+  "test_time": "2026-03-26 10:41:07",
+  "audio_file": "/mnt/d/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro01/Ses01F_impro01_F000.wav",
+  "user": {
+    "id": 20,
+    "email": "e2etest_1774503643@emotionflow.ai"
+  },
+  "job_id": "786a5fba-a1da-4e73-a9e9-2e5fa2cacb96",
+  "processing_time_ms": 14484.642385000028,
+  "result": {
+    "filename": "786a5fba-a1da-4e73-a9e9-2e5fa2cacb96.wav",
+    "duration_seconds": 2.0,
+    "overall_sentiment": "neutral",
+    "timeline": [
+      {
+        "timestamp_start": 0.0,
+        "timestamp_end": 2.0,
+        "emotion": "neutral",
+        "intensity": 0.4489,
+        "trigger_phrase": null,
+        "cause": null
+      }
+    ],
+    "transcript": [
+      {
+        "start": 0.0,
+        "end": 2.0,
+        "text": "Excuse me?",
+        "speaker": "Speaker 1"
+      }
+    ],
+    "model_tier": "balanced",
+    "processing_time_ms": 14484.642385000028
+  },
+  "telemetry": {
+    "new_entries": 16,
+    "user_entries": 14,
+    "paths_logged": [
+      "/auth/me",
+      "/webhooks/",
+      "/analysis/jobs/786a5fba-a1da-4e73-a9e9-2e5fa2cacb96",
+      "/webhooks/17/deliveries",
+      "/analysis/jobs",
+      "/analysis/analyze-file",
+      "/webhooks/17/test"
+    ]
+  },
+  "poll_count": 6,
+  "total_wall_time_s": 15.2
+}

@@ -1,0 +1,41 @@
+# Worker compose — runs on the local GPU machine (RTX 5070)
+# Connects to VPS services over Tailscale.
+#
+# Prerequisites:
+#   1. NVIDIA Container Toolkit installed: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
+#   2. Tailscale running and connected to the same tailnet as the VPS
+#   3. .env file with VPS Tailscale IP, DB creds, WORKER_SECRET, GEMINI_API_KEY
+#
+# Usage:
+#   docker compose -f docker-compose.worker.yml up -d
+
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: emotionflow-worker
+    env_file: .env
+    environment:
+      # Point to VPS via Tailscale IP (override in .env)
+      - SYNC_DATABASE_URL=${SYNC_DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - API_BASE_URL=${API_BASE_URL}
+      - WORKER_SECRET=${WORKER_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - MODEL_TIER=${MODEL_TIER:-balanced}
+    volumes:
+      - model_cache:/root/.cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    # Worker accesses VPS via host network (Tailscale)
+    network_mode: host
+
+volumes:
+  model_cache:

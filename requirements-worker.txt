@@ -1,0 +1,9 @@
+# AI/ML dependencies for worker process
+# These are NOT installed in the API container to keep it lightweight
+openai-whisper>=20231117
+transformers>=4.36.0
+torch>=2.1.0
+librosa>=0.10.1
+soundfile>=0.12.1
+google-generativeai>=0.3.0
+requests>=2.31.0

@@ -1,0 +1,1043 @@
+{
+  "filename": "Ses01F_impro01.wav",
+  "duration_seconds": 132.0,
+  "overall_sentiment": "negative",
+  "model_tier": "fast",
+  "language": "en",
+  "summary": "The conversation details a highly frustrating bureaucratic encounter where a person attempts to obtain an ID but is met with illogical requirements and unhelpful responses. The emotional arc is characterized by initial anger, frequent surprise and confusion at the process, and moments of sadness over personal loss, culminating in renewed anger and a request for a supervisor.",
+  "timeline": [
+    {
+      "timestamp_start": 0.0,
+      "timestamp_end": 7.0,
+      "emotion": "anger",
+      "intensity": 0.3203,
+      "trigger_phrase": "Excuse me.",
+      "cause": "The abrupt and repeated 'Excuse me' at the beginning, especially with a high intensity of anger, indicates an aggressive attempt to gain attention or express impatience."
+    },
+    {
+      "timestamp_start": 7.0,
+      "timestamp_end": 8.0,
+      "emotion": "anger",
+      "intensity": 0.3203,
+      "trigger_phrase": "Excuse me.",
+      "cause": "Repetition of the phrase reinforces the initial aggressive and impatient tone, indicating continued frustration."
+    },
+    {
+      "timestamp_start": 8.0,
+      "timestamp_end": 10.0,
+      "emotion": "neutral",
+      "intensity": 0.903,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 10.0,
+      "timestamp_end": 11.0,
+      "emotion": "neutral",
+      "intensity": 0.8143,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 11.0,
+      "timestamp_end": 13.0,
+      "emotion": "surprise",
+      "intensity": 0.7518,
+      "trigger_phrase": "Can you see them?",
+      "cause": "The question implies an unexpected situation or a challenge to the previous statement/action, indicating surprise that the forms might not be visible or that the other person is asking for them."
+    },
+    {
+      "timestamp_start": 13.0,
+      "timestamp_end": 17.0,
+      "emotion": "neutral",
+      "intensity": 0.495,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 17.0,
+      "timestamp_end": 19.0,
+      "emotion": "surprise",
+      "intensity": 0.7377,
+      "trigger_phrase": "Who told you to get in this line?",
+      "cause": "This confrontational question expresses surprise or disbelief at the person's presence in the line, implying they are in the wrong place and creating immediate confusion."
+    },
+    {
+      "timestamp_start": 19.0,
+      "timestamp_end": 20.0,
+      "emotion": "neutral",
+      "intensity": 0.7311,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 20.0,
+      "timestamp_end": 21.0,
+      "emotion": "neutral",
+      "intensity": 0.8299,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 21.0,
+      "timestamp_end": 23.0,
+      "emotion": "neutral",
+      "intensity": 0.8049,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 23.0,
+      "timestamp_end": 27.0,
+      "emotion": "neutral",
+      "intensity": 0.8751,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 28.0,
+      "timestamp_end": 29.0,
+      "emotion": "surprise",
+      "intensity": 0.7797,
+      "trigger_phrase": "Well, what is this?",
+      "cause": "Expresses confusion and surprise at the new information about the 'particular form' and the line, indicating a sudden realization of a problem or misunderstanding."
+    },
+    {
+      "timestamp_start": 29.0,
+      "timestamp_end": 30.0,
+      "emotion": "surprise",
+      "intensity": 0.8307,
+      "trigger_phrase": "What is this?",
+      "cause": "Repetition emphasizes the surprise and confusion, indicating a struggle to comprehend the situation or the implications of the form."
+    },
+    {
+      "timestamp_start": 30.0,
+      "timestamp_end": 31.0,
+      "emotion": "neutral",
+      "intensity": 0.8803,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 31.0,
+      "timestamp_end": 33.0,
+      "emotion": "neutral",
+      "intensity": 0.5252,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 33.0,
+      "timestamp_end": 35.0,
+      "emotion": "neutral",
+      "intensity": 0.9418,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 35.0,
+      "timestamp_end": 39.0,
+      "emotion": "neutral",
+      "intensity": 0.9576,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 39.0,
+      "timestamp_end": 40.0,
+      "emotion": "surprise",
+      "intensity": 0.9222,
+      "trigger_phrase": "What?",
+      "cause": "This single word expresses strong disbelief and confusion at the new, seemingly contradictory requirement of needing a 'different form of ID'."
+    },
+    {
+      "timestamp_start": 40.0,
+      "timestamp_end": 41.0,
+      "emotion": "joy",
+      "intensity": 0.3829,
+      "trigger_phrase": "I'm getting an ID.",
+      "cause": "Despite the surrounding frustration, this statement might represent a brief moment of self-reassurance or a slight, perhaps ironic, acknowledgment of their primary objective."
+    },
+    {
+      "timestamp_start": 41.0,
+      "timestamp_end": 42.0,
+      "emotion": "neutral",
+      "intensity": 0.6396,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 42.0,
+      "timestamp_end": 47.0,
+      "emotion": "neutral",
+      "intensity": 0.9357,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 47.0,
+      "timestamp_end": 49.0,
+      "emotion": "surprise",
+      "intensity": 0.6873,
+      "trigger_phrase": "How am I supposed to get an ID without an ID?",
+      "cause": "Expresses incredulity and frustration at the seemingly circular and illogical requirement of needing an ID to obtain an ID."
+    },
+    {
+      "timestamp_start": 49.0,
+      "timestamp_end": 52.0,
+      "emotion": "neutral",
+      "intensity": 0.615,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 52.0,
+      "timestamp_end": 55.0,
+      "emotion": "neutral",
+      "intensity": 0.9268,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 55.0,
+      "timestamp_end": 57.0,
+      "emotion": "neutral",
+      "intensity": 0.955,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 57.0,
+      "timestamp_end": 58.0,
+      "emotion": "neutral",
+      "intensity": 0.8597,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 58.0,
+      "timestamp_end": 60.0,
+      "emotion": "neutral",
+      "intensity": 0.6279,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 60.0,
+      "timestamp_end": 62.0,
+      "emotion": "neutral",
+      "intensity": 0.8253,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 62.0,
+      "timestamp_end": 63.0,
+      "emotion": "neutral",
+      "intensity": 0.4553,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 63.0,
+      "timestamp_end": 65.0,
+      "emotion": "neutral",
+      "intensity": 0.7362,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 65.0,
+      "timestamp_end": 66.0,
+      "emotion": "joy",
+      "intensity": 0.6645,
+      "trigger_phrase": "A birth certificate.",
+      "cause": "This could be a fleeting moment of relief or recognition that a potential solution has been identified, even if its availability is uncertain."
+    },
+    {
+      "timestamp_start": 66.0,
+      "timestamp_end": 67.0,
+      "emotion": "surprise",
+      "intensity": 0.8386,
+      "trigger_phrase": "A pair of cards?",
+      "cause": "Expresses confusion or surprise at the suggestion of 'pair of cards' as an acceptable form of identification, indicating uncertainty about its validity."
+    },
+    {
+      "timestamp_start": 67.0,
+      "timestamp_end": 68.0,
+      "emotion": "surprise",
+      "intensity": 0.8572,
+      "trigger_phrase": "A birth certificate?",
+      "cause": "Repetition, possibly with rising incredulity or confusion, questioning the validity or availability of such a document in their situation."
+    },
+    {
+      "timestamp_start": 68.0,
+      "timestamp_end": 69.0,
+      "emotion": "surprise",
+      "intensity": 0.8572,
+      "trigger_phrase": "A birth certificate?",
+      "cause": "Further repetition, emphasizing the surprise or disbelief at the requirement or the suggestion, highlighting the perceived difficulty."
+    },
+    {
+      "timestamp_start": 69.0,
+      "timestamp_end": 70.0,
+      "emotion": "neutral",
+      "intensity": 0.7878,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 70.0,
+      "timestamp_end": 71.0,
+      "emotion": "surprise",
+      "intensity": 0.6303,
+      "trigger_phrase": "Did you go to school?",
+      "cause": "A probing question, possibly indicating surprise that the person might not have a student ID or is being asked about it as a last resort."
+    },
+    {
+      "timestamp_start": 71.0,
+      "timestamp_end": 72.0,
+      "emotion": "surprise",
+      "intensity": 0.7193,
+      "trigger_phrase": "Anything?",
+      "cause": "A desperate, open-ended question, expressing surprise at the lack of viable options or the extreme difficulty of the situation."
+    },
+    {
+      "timestamp_start": 72.0,
+      "timestamp_end": 74.0,
+      "emotion": "sadness",
+      "intensity": 0.6816,
+      "trigger_phrase": "my wallet was stolen.",
+      "cause": "The direct statement of a personal loss and misfortune is the clear cause of sadness, evoking empathy for the speaker's predicament."
+    },
+    {
+      "timestamp_start": 74.0,
+      "timestamp_end": 76.0,
+      "emotion": "neutral",
+      "intensity": 0.744,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 76.0,
+      "timestamp_end": 77.0,
+      "emotion": "sadness",
+      "intensity": 0.4999,
+      "trigger_phrase": "I don't have any credit cards.",
+      "cause": "Reinforces the previous statement of loss and lack, extending the feeling of sadness by detailing the extent of the personal belongings lost."
+    },
+    {
+      "timestamp_start": 77.0,
+      "timestamp_end": 79.0,
+      "emotion": "neutral",
+      "intensity": 0.7023,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 79.0,
+      "timestamp_end": 81.0,
+      "emotion": "neutral",
+      "intensity": 0.8054,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 81.0,
+      "timestamp_end": 84.0,
+      "emotion": "neutral",
+      "intensity": 0.9639,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 84.0,
+      "timestamp_end": 85.0,
+      "emotion": "neutral",
+      "intensity": 0.9248,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 85.0,
+      "timestamp_end": 86.0,
+      "emotion": "anger",
+      "intensity": 0.5191,
+      "trigger_phrase": "That's out of control.",
+      "cause": "Expresses strong frustration and indignation at the perceived absurdity and illogical nature of the bureaucratic process, leading to anger."
+    },
+    {
+      "timestamp_start": 86.0,
+      "timestamp_end": 91.0,
+      "emotion": "surprise",
+      "intensity": 0.9252,
+      "trigger_phrase": "I don't understand why this is so complicated for people when they get here.",
+      "cause": "The speaker expresses disbelief and frustration at the recurring complexity of the process, which is a form of surprise at the inefficiency and lack of common sense."
+    },
+    {
+      "timestamp_start": 91.0,
+      "timestamp_end": 92.0,
+      "emotion": "neutral",
+      "intensity": 0.964,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 92.0,
+      "timestamp_end": 93.0,
+      "emotion": "neutral",
+      "intensity": 0.9534,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 93.0,
+      "timestamp_end": 96.0,
+      "emotion": "neutral",
+      "intensity": 0.7818,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 96.0,
+      "timestamp_end": 98.0,
+      "emotion": "neutral",
+      "intensity": 0.4411,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 98.0,
+      "timestamp_end": 99.0,
+      "emotion": "neutral",
+      "intensity": 0.7794,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 99.0,
+      "timestamp_end": 102.0,
+      "emotion": "neutral",
+      "intensity": 0.8091,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 102.0,
+      "timestamp_end": 103.0,
+      "emotion": "neutral",
+      "intensity": 0.8143,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 103.0,
+      "timestamp_end": 104.0,
+      "emotion": "surprise",
+      "intensity": 0.4267,
+      "trigger_phrase": "You want to see my supervisor?",
+      "cause": "Expresses surprise or incredulity at the request to see a supervisor, possibly with a hint of challenge or disbelief that the customer would make such a request."
+    },
+    {
+      "timestamp_start": 104.0,
+      "timestamp_end": 105.0,
+      "emotion": "neutral",
+      "intensity": 0.7852,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 105.0,
+      "timestamp_end": 106.0,
+      "emotion": "neutral",
+      "intensity": 0.5623,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 106.0,
+      "timestamp_end": 107.0,
+      "emotion": "neutral",
+      "intensity": 0.9285,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 107.0,
+      "timestamp_end": 117.0,
+      "emotion": "neutral",
+      "intensity": 0.6664,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 117.0,
+      "timestamp_end": 120.0,
+      "emotion": "neutral",
+      "intensity": 0.9265,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 120.0,
+      "timestamp_end": 125.0,
+      "emotion": "neutral",
+      "intensity": 0.624,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 125.0,
+      "timestamp_end": 128.0,
+      "emotion": "neutral",
+      "intensity": 0.7711,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 128.0,
+      "timestamp_end": 130.0,
+      "emotion": "neutral",
+      "intensity": 0.9395,
+      "trigger_phrase": null,
+      "cause": null
+    },
+    {
+      "timestamp_start": 130.0,
+      "timestamp_end": 132.0,
+      "emotion": "neutral",
+      "intensity": 0.8911,
+      "trigger_phrase": null,
+      "cause": null
+    }
+  ],
+  "transcript": [
+    {
+      "start": 0.0,
+      "end": 7.0,
+      "text": "Excuse me.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 7.0,
+      "end": 8.0,
+      "text": "Excuse me.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 8.0,
+      "end": 10.0,
+      "text": "Give your forums.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 10.0,
+      "end": 11.0,
+      "text": "Yeah.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 11.0,
+      "end": 13.0,
+      "text": "Can you see them?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 13.0,
+      "end": 17.0,
+      "text": "Sir, problem.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 17.0,
+      "end": 19.0,
+      "text": "Who told you to get in this line?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 19.0,
+      "end": 20.0,
+      "text": "You did.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 20.0,
+      "end": 21.0,
+      "text": "No.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 21.0,
+      "end": 23.0,
+      "text": "You were standing at the beginning, you directs me.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 23.0,
+      "end": 27.0,
+      "text": "Okay, but I didn't tell you to get in this line if you're filling out this particular form.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 28.0,
+      "end": 29.0,
+      "text": "Well, what is this?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 29.0,
+      "end": 30.0,
+      "text": "What is this?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 30.0,
+      "end": 31.0,
+      "text": "Ex-4.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 31.0,
+      "end": 33.0,
+      "text": "You can't.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 33.0,
+      "end": 35.0,
+      "text": "This is not the line for the ZX4.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 35.0,
+      "end": 39.0,
+      "text": "If you're going to fill out the ZX4, you need to have a different form of ID.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 39.0,
+      "end": 40.0,
+      "text": "What?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 40.0,
+      "end": 41.0,
+      "text": "I'm getting an ID.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 41.0,
+      "end": 42.0,
+      "text": "This is why I'm here.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 42.0,
+      "end": 47.0,
+      "text": "No, I need another set of ID to prove that this is actually you.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 47.0,
+      "end": 49.0,
+      "text": "How am I supposed to get an ID without an ID?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 49.0,
+      "end": 52.0,
+      "text": "How does the person get an ID in the first place?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 52.0,
+      "end": 55.0,
+      "text": "I don't know, but I need an ID to pass this form along.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 55.0,
+      "end": 57.0,
+      "text": "I can't just send it along without an ID.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 57.0,
+      "end": 58.0,
+      "text": "I'm here to get an ID.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 58.0,
+      "end": 60.0,
+      "text": "No, I need another ID.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 60.0,
+      "end": 62.0,
+      "text": "A separate one.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 62.0,
+      "end": 63.0,
+      "text": "Like what?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 63.0,
+      "end": 65.0,
+      "text": "Like a birth certificate?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 65.0,
+      "end": 66.0,
+      "text": "A birth certificate.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 66.0,
+      "end": 67.0,
+      "text": "A pair of cards?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 67.0,
+      "end": 68.0,
+      "text": "A birth certificate?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 68.0,
+      "end": 69.0,
+      "text": "A birth certificate?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 69.0,
+      "end": 70.0,
+      "text": "A student ID.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 70.0,
+      "end": 71.0,
+      "text": "Did you go to school?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 71.0,
+      "end": 72.0,
+      "text": "Anything?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 72.0,
+      "end": 74.0,
+      "text": "Yes, but my wallet was stolen.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 74.0,
+      "end": 76.0,
+      "text": "I don't have anything.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 76.0,
+      "end": 77.0,
+      "text": "I don't have any credit cards.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 77.0,
+      "end": 79.0,
+      "text": "I don't have my ID.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 79.0,
+      "end": 81.0,
+      "text": "Do you have things that on file here?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 81.0,
+      "end": 84.0,
+      "text": "Yeah, we keep it on file, but we need an ID to access",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 84.0,
+      "end": 85.0,
+      "text": "that file.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 85.0,
+      "end": 86.0,
+      "text": "That's out of control.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 86.0,
+      "end": 91.0,
+      "text": "I don't understand why this is so complicated for people when they get here.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 91.0,
+      "end": 92.0,
+      "text": "It's just a simple form.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 92.0,
+      "end": 93.0,
+      "text": "I just need an ID.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 93.0,
+      "end": 96.0,
+      "text": "How long have you been working here?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 96.0,
+      "end": 98.0,
+      "text": "It's way too long.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 98.0,
+      "end": 99.0,
+      "text": "Clearly.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 99.0,
+      "end": 102.0,
+      "text": "Do you have a supervisor or something?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 102.0,
+      "end": 103.0,
+      "text": "Yeah.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 103.0,
+      "end": 104.0,
+      "text": "You want to see my supervisor?",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 104.0,
+      "end": 105.0,
+      "text": "That won't happen.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 105.0,
+      "end": 106.0,
+      "text": "Yeah, you want to see my supervisor.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 106.0,
+      "end": 107.0,
+      "text": "I'll be right back.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 107.0,
+      "end": 117.0,
+      "text": "Thank you.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 117.0,
+      "end": 120.0,
+      "text": "We'll walk so far.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 120.0,
+      "end": 125.0,
+      "text": "Okay, all the cameras please on.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 125.0,
+      "end": 128.0,
+      "text": "Microphones.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 128.0,
+      "end": 130.0,
+      "text": "So this is up.",
+      "speaker": "Speaker 1"
+    },
+    {
+      "start": 130.0,
+      "end": 132.0,
+      "text": "This won't die, it's two.",
+      "speaker": "Speaker 1"
+    }
+  ],
+  "transitions": [
+    {
+      "from_segment": 1,
+      "to_segment": 2,
+      "from_emotion": "anger",
+      "to_emotion": "neutral",
+      "explanation": "The speaker shifts from an aggressive 'Excuse me' to a neutral, direct instruction, indicating a change from expressing frustration to focusing on the task."
+    },
+    {
+      "from_segment": 3,
+      "to_segment": 4,
+      "from_emotion": "neutral",
+      "to_emotion": "surprise",
+      "explanation": "A simple affirmation transitions to surprise as the speaker asks a question that implies an unexpected situation or a challenge regarding the visibility of forms."
+    },
+    {
+      "from_segment": 4,
+      "to_segment": 5,
+      "from_emotion": "surprise",
+      "to_emotion": "neutral",
+      "explanation": "The surprise from the previous question resolves into a neutral, factual statement of a problem, indicating a shift to addressing the issue directly."
+    },
+    {
+      "from_segment": 5,
+      "to_segment": 6,
+      "from_emotion": "neutral",
+      "to_emotion": "surprise",
+      "explanation": "A neutral statement of a problem is followed by a confrontational question, 'Who told you to get in this line?', expressing surprise and disbelief at the person's presence."
+    },
+    {
+      "from_segment": 10,
+      "to_segment": 11,
+      "from_emotion": "neutral",
+      "to_emotion": "surprise",
+      "explanation": "A neutral clarification is met with surprise as the speaker expresses confusion and a sudden realization of a problem with the 'particular form' and the line."
+    },
+    {
+      "from_segment": 16,
+      "to_segment": 17,
+      "from_emotion": "neutral",
+      "to_emotion": "surprise",
+      "explanation": "A neutral statement of a new requirement ('different form of ID') immediately triggers strong disbelief and confusion, expressed as 'What?'."
+    },
+    {
+      "from_segment": 17,
+      "to_segment": 18,
+      "from_emotion": "surprise",
+      "to_emotion": "joy",
+      "explanation": "The surprise from a new requirement shifts to a brief, low-intensity joy, possibly reflecting a momentary self-reassurance or ironic acknowledgment of their primary objective ('I'm getting an ID')."
+    },
+    {
+      "from_segment": 18,
+      "to_segment": 19,
+      "from_emotion": "joy",
+      "to_emotion": "neutral",
+      "explanation": "The brief moment of joy transitions back to a neutral, factual statement of purpose, indicating a return to the practicalities of the situation."
+    },
+    {
+      "from_segment": 20,
+      "to_segment": 21,
+      "from_emotion": "neutral",
+      "to_emotion": "surprise",
+      "explanation": "A neutral reiteration of a requirement leads to surprise and incredulity as the speaker questions the illogical nature of needing an ID to get an ID."
+    },
+    {
+      "from_segment": 21,
+      "to_segment": 22,
+      "from_emotion": "surprise",
+      "to_emotion": "neutral",
+      "explanation": "The immediate surprise and incredulity transition to a more reflective, rhetorical question, maintaining frustration but with a less immediate emotional spike."
+    },
+    {
+      "from_segment": 29,
+      "to_segment": 30,
+      "from_emotion": "neutral",
+      "to_emotion": "joy",
+      "explanation": "A neutral suggestion of a 'birth certificate' as an ID option leads to a brief moment of joy, possibly indicating a fleeting sense of relief or recognition of a potential solution."
+    },
+    {
+      "from_segment": 30,
+      "to_segment": 31,
+      "from_emotion": "joy",
+      "to_emotion": "surprise",
+      "explanation": "The brief joy from a potential solution is immediately replaced by surprise and confusion at the subsequent suggestion of 'A pair of cards?' as an ID."
+    },
+    {
+      "from_segment": 34,
+      "to_segment": 35,
+      "from_emotion": "neutral",
+      "to_emotion": "surprise",
+      "explanation": "A neutral suggestion of 'A student ID' is followed by a probing question, 'Did you go to school?', indicating surprise or disbelief regarding the person's potential lack of such ID."
+    },
+    {
+      "from_segment": 35,
+      "to_segment": 36,
+      "from_emotion": "surprise",
+      "to_emotion": "surprise",
+      "explanation": "The surprise continues and intensifies with a desperate, open-ended question 'Anything?', expressing further surprise at the lack of viable options."
+    },
+    {
+      "from_segment": 36,
+      "to_segment": 37,
+      "from_emotion": "surprise",
+      "to_emotion": "sadness",
+      "explanation": "The desperate search for solutions abruptly shifts to sadness as the speaker reveals the personal misfortune of having their 'wallet was stolen'."
+    },
+    {
+      "from_segment": 37,
+      "to_segment": 38,
+      "from_emotion": "sadness",
+      "to_emotion": "neutral",
+      "explanation": "The emotional revelation of sadness transitions to a neutral, factual statement of current lack, indicating a shift from expressing emotion to stating the consequence."
+    },
+    {
+      "from_segment": 38,
+      "to_segment": 39,
+      "from_emotion": "neutral",
+      "to_emotion": "sadness",
+      "explanation": "A neutral statement of lack is followed by a specific detail of loss ('I don't have any credit cards'), reinforcing and extending the feeling of sadness."
+    },
+    {
+      "from_segment": 39,
+      "to_segment": 40,
+      "from_emotion": "sadness",
+      "to_emotion": "neutral",
+      "explanation": "The sadness from personal loss transitions to a neutral, factual reiteration of the core problem, indicating a return to the practical aspect of the situation."
+    },
+    {
+      "from_segment": 43,
+      "to_segment": 44,
+      "from_emotion": "neutral",
+      "to_emotion": "anger",
+      "explanation": "A neutral explanation of a bureaucratic hurdle ('need an ID to access that file') triggers anger, as the speaker expresses strong frustration at the perceived absurdity of the process."
+    },
+    {
+      "from_segment": 44,
+      "to_segment": 45,
+      "from_emotion": "anger",
+      "to_emotion": "surprise",
+      "explanation": "The direct expression of anger transitions to surprise mixed with frustration, as the speaker expresses disbelief at the recurring complexity and inefficiency of the process."
+    },
+    {
+      "from_segment": 52,
+      "to_segment": 53,
+      "from_emotion": "neutral",
+      "to_emotion": "surprise",
+      "explanation": "A neutral affirmation is followed by a question expressing surprise or incredulity at the customer's request to see a supervisor, possibly with a challenging undertone."
+    }
+  ]
+}

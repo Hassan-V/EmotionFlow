@@ -1,0 +1,16 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+uploads/
+*.egg-info/
+dist/
+build/
+.mypy_cache/
+.vscode/
+model_cache/
+.venv/
+node_modules/
+frontend/.next/
+nginx/certs/
