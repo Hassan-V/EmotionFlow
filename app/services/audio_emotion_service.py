@@ -18,16 +18,12 @@ Tested on IEMOCAP ground-truth:
   - Far superior to text-only classifiers (~13% random for all labels)
 """
 import logging
-import os
 import time
-from typing import Optional
 
 import numpy as np
 import torch
 import torchaudio
 from transformers import (
-    AutoModelForAudioClassification,
-    AutoFeatureExtractor,
     Pipeline,
     pipeline,
 )

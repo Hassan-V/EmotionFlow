@@ -1,7 +1,7 @@
 from datetime import datetime, timezone, timedelta
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, case
 
@@ -12,9 +12,8 @@ from app.core.redis import redis_client
 from app.models.user import User, APIKey
 from app.models.analysis import AnalysisJob
 from app.models.billing import BillingEvent
-from app.models.telemetry import APILog
 from app.models.schemas import (
-    TelemetrySummary, UserAdminView, UserQuotaUpdate, UserResponse, ErrorResponse,
+    TelemetrySummary, UserAdminView, UserQuotaUpdate, UserResponse,
 )
 
 logger = logging.getLogger("emotionflow.admin")

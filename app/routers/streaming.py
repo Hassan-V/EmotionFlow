@@ -30,7 +30,6 @@ import io
 import logging
 import os
 import tempfile
-import time
 from typing import Optional
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query

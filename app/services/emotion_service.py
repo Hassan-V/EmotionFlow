@@ -17,7 +17,6 @@ Emotions (balanced tier / GoEmotions):
 """
 import logging
 import time
-from typing import Optional
 
 import torch
 from transformers import pipeline, Pipeline

@@ -78,7 +78,8 @@ def transcribe(file_path: str, tier: str = "balanced", language: Optional[str] =
     logger.info(f"Transcribing '{file_path}' with tier={tier}")
 
     # Validate file exists and is readable before passing to Whisper
-    import os, subprocess
+    import os
+    import subprocess
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Audio file not found: {file_path}")
     logger.info(f"File size: {os.path.getsize(file_path)} bytes")

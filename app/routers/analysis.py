@@ -12,7 +12,7 @@ from app.core.config import get_settings
 from app.models.user import User
 from app.models.analysis import AnalysisJob
 from app.models.schemas import (
-    JobSubmitResponse, JobStatusResponse, AnalysisResult, ErrorResponse,
+    JobSubmitResponse, JobStatusResponse, ErrorResponse,
 )
 from app.services.queue_service import enqueue_analysis_job
 

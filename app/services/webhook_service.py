@@ -18,9 +18,8 @@ import hashlib
 import hmac
 import json
 import logging
-import time
 from datetime import datetime, timezone, timedelta
-from typing import Optional, List
+from typing import Optional
 
 import httpx
 
@@ -150,8 +149,6 @@ async def dispatch_loop(redis_url: str, db_url: str):
     import redis.asyncio as aioredis
     from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
     from sqlalchemy.orm import sessionmaker
-    from sqlalchemy import select, update
-    from app.models.webhook import Webhook, WebhookDelivery
     # Import all models so SQLAlchemy can configure all relationship mappers
     from app.models.user import User  # noqa: F401
     from app.models.analysis import AnalysisJob  # noqa: F401
@@ -252,7 +249,7 @@ async def _handle_event(async_session, event_data: dict):
         result = await session.execute(
             select(Webhook).where(
                 Webhook.user_id == user_id,
-                Webhook.is_active == True,
+                Webhook.is_active == True,  # noqa: E712
             )
         )
         webhooks = result.scalars().all()
