@@ -4,8 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { authApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { GoogleSignInButton } from "@/components/ui/GoogleSignInButton";
 import { Zap } from "lucide-react";
 
 export default function LoginPage() {
@@ -13,7 +15,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, refresh } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,6 +33,21 @@ export default function LoginPage() {
     }
   };
 
+  const handleGoogleLogin = async (credential: string) => {
+    setError("");
+    setLoading(true);
+    try {
+      await authApi.google(credential);
+      await refresh();
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
+      setError(msg ?? "Google sign-in failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4">
       <div className="w-full max-w-sm">
@@ -42,6 +59,14 @@ export default function LoginPage() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
           <h1 className="text-xl font-semibold mb-1">Welcome back</h1>
           <p className="text-sm text-zinc-500 mb-6">Sign in to your account</p>
+
+          <GoogleSignInButton onCredential={handleGoogleLogin} />
+
+          <div className="flex items-center gap-3 my-5">
+            <div className="flex-1 h-px bg-zinc-800" />
+            <span className="text-xs text-zinc-600">or</span>
+            <div className="flex-1 h-px bg-zinc-800" />
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input

@@ -17,6 +17,8 @@ class User(Base):
     full_name = Column(String(255), nullable=True)
     role = Column(String(20), nullable=False, default="user")  # user, admin
     is_active = Column(Boolean, default=True, nullable=False)
+    is_verified = Column(Boolean, default=False, nullable=False)
+    google_id = Column(String(255), unique=True, nullable=True, index=True)
 
     # Quota tracking
     quota_limit = Column(Integer, default=100, nullable=False)  # max API calls per day

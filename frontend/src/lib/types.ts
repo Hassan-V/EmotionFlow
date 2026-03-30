@@ -7,6 +7,7 @@ export interface User {
   full_name: string | null;
   role: "user" | "admin";
   is_active: boolean;
+  is_verified: boolean;
   quota_limit: number;
   quota_used_today: number;
   created_at: string;

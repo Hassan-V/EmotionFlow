@@ -62,11 +62,16 @@ class UserResponse(BaseModel):
     full_name: Optional[str]
     role: str
     is_active: bool
+    is_verified: bool = False
     quota_limit: int
     quota_used_today: int
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class GoogleAuthRequest(BaseModel):
+    credential: str  # Google ID token from frontend
 
 
 class UserUpdate(BaseModel):
@@ -82,6 +87,10 @@ class UserUpdate(BaseModel):
         if not re.match(pattern, v):
             raise ValueError("Invalid email format")
         return v.lower().strip()
+
+
+class MessageResponse(BaseModel):
+    message: str
 
 
 # ─── API Key Schemas ─────────────────────────────────────────────

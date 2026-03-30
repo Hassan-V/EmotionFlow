@@ -17,6 +17,11 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - DATABASE_URL=postgresql+asyncpg://emotionflow:${DB_PASSWORD}@postgres:5432/emotionflow
       - SYNC_DATABASE_URL=postgresql+psycopg2://emotionflow:${DB_PASSWORD}@postgres:5432/emotionflow
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - EMAIL_FROM=${EMAIL_FROM:-EmotionFlow <noreply@emotionflow.site>}
+      - FRONTEND_URL=https://${DOMAIN}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
     volumes:
       - upload_data:/app/uploads
 
@@ -30,6 +35,15 @@ services:
       - "5433:5432"  # keep for Tailscale worker access
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./pg-certs/server.crt:/var/lib/postgresql/server.crt:ro
+      - ./pg-certs/server.key:/var/lib/postgresql/server.key:ro
+    command: >
+      postgres
+        -c ssl=on
+        -c ssl_cert_file=/var/lib/postgresql/server.crt
+        -c ssl_key_file=/var/lib/postgresql/server.key
 
   redis:
     ports:
@@ -40,9 +54,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
     container_name: emotionflow-frontend
     environment:
       - NEXT_PUBLIC_API_URL=https://${DOMAIN}/api-backend
+      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
       - NODE_ENV=production
     restart: unless-stopped
     networks:

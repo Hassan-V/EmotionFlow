@@ -42,6 +42,15 @@ class Settings(BaseSettings):
     # CORS
     CORS_ORIGINS: str = ""  # comma-separated, e.g. "https://example.com,http://localhost:3000"
 
+    # Email (Resend)
+    RESEND_API_KEY: str = ""
+    EMAIL_FROM: str = "EmotionFlow <noreply@emotionflow.site>"
+    FRONTEND_URL: str = "http://localhost:3000"  # for email verification links
+
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+
     # Billing (simulated cost per completed job, USD)
     TIER_COST_FAST: float = 0.001
     TIER_COST_BALANCED: float = 0.005

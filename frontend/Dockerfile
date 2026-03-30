@@ -8,6 +8,8 @@ RUN npm ci
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ARG NEXT_PUBLIC_GOOGLE_CLIENT_ID
+ENV NEXT_PUBLIC_GOOGLE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 

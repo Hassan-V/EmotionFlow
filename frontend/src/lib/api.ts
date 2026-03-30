@@ -96,6 +96,18 @@ export const authApi = {
     return r.data;
   },
 
+  google: async (credential: string) => {
+    const r = await api.post<TokenResponse>("/auth/google", { credential });
+    setTokens(r.data.access_token, r.data.refresh_token);
+    return r.data;
+  },
+
+  verifyEmail: (token: string) =>
+    api.post<{ message: string }>("/auth/verify-email", null, { params: { token } }).then((r) => r.data),
+
+  resendVerification: () =>
+    api.post<{ message: string }>("/auth/resend-verification").then((r) => r.data),
+
   me: () => api.get<User>("/auth/me").then((r) => r.data),
 
   updateMe: (data: { email?: string; full_name?: string }) =>

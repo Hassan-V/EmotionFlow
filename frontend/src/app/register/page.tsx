@@ -4,8 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authApi } from "@/lib/api";
+import { useAuth } from "@/contexts/AuthContext";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { GoogleSignInButton } from "@/components/ui/GoogleSignInButton";
 import { Zap } from "lucide-react";
 
 export default function RegisterPage() {
@@ -13,6 +15,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { refresh } = useAuth();
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -32,6 +35,21 @@ export default function RegisterPage() {
     }
   };
 
+  const handleGoogleRegister = async (credential: string) => {
+    setError("");
+    setLoading(true);
+    try {
+      await authApi.google(credential);
+      await refresh();
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
+      setError(msg ?? "Google sign-up failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4">
       <div className="w-full max-w-sm">
@@ -43,6 +61,14 @@ export default function RegisterPage() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
           <h1 className="text-xl font-semibold mb-1">Create account</h1>
           <p className="text-sm text-zinc-500 mb-6">Get started with EmotionFlow</p>
+
+          <GoogleSignInButton onCredential={handleGoogleRegister} />
+
+          <div className="flex items-center gap-3 my-5">
+            <div className="flex-1 h-px bg-zinc-800" />
+            <span className="text-xs text-zinc-600">or</span>
+            <div className="flex-1 h-px bg-zinc-800" />
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input label="Full name" placeholder="Jane Smith" value={form.full_name} onChange={set("full_name")} />
