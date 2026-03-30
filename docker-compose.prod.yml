@@ -50,33 +50,17 @@ services:
     depends_on:
       - api
 
-  # Nginx reverse proxy
+  # Nginx reverse proxy (Cloudflare handles SSL termination)
   nginx:
     image: nginx:alpine
     container_name: emotionflow-nginx
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/certs:/etc/nginx/certs:ro
-      - certbot_www:/var/www/certbot:ro
     depends_on:
       - api
       - frontend
     restart: unless-stopped
     networks:
       - emotionflow-net
-
-  # Certbot for Let's Encrypt
-  certbot:
-    image: certbot/certbot
-    container_name: emotionflow-certbot
-    volumes:
-      - ./nginx/certs:/etc/letsencrypt
-      - certbot_www:/var/www/certbot
-    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done"
-    restart: unless-stopped
-
-volumes:
-  certbot_www:
