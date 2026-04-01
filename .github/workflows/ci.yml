@@ -98,6 +98,8 @@ jobs:
           script: |
             cd ~/emotionflow
             git pull origin main
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build api frontend
+            docker image prune -f
             docker compose -f docker-compose.yml -f docker-compose.prod.yml build
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
             echo "Deployed $(git rev-parse --short HEAD)"
