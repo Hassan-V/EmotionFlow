@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EmotionFlow — Coming Soon</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #09090b;
+      color: #f4f4f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .badge {
+      display: inline-block;
+      background: #7c3aed22;
+      border: 1px solid #7c3aed55;
+      color: #a78bfa;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    h1 span { color: #7c3aed; }
+    p {
+      color: #a1a1aa;
+      font-size: 1.125rem;
+      max-width: 38ch;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+    .notify {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 380px;
+      width: 100%;
+    }
+    .notify input {
+      flex: 1;
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      color: #f4f4f5;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .notify input:focus { border-color: #7c3aed; }
+    .notify button {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .notify button:hover { background: #6d28d9; }
+    .features {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .feature {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 1rem;
+      padding: 1rem 1.25rem;
+      text-align: left;
+      width: 180px;
+    }
+    .feature .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .feature h3 { font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .feature p  { font-size: 0.75rem; color: #71717a; margin: 0; }
+    footer {
+      margin-top: 4rem;
+      font-size: 0.75rem;
+      color: #52525b;
+    }
+  </style>
+</head>
+<body>
+  <div class="badge">Coming Soon</div>
+  <h1>Emotion AI for<br/><span>every conversation</span></h1>
+  <p>EmotionFlow detects emotional shifts in audio and explains what caused them. Launching soon.</p>
+  <div class="notify">
+    <input type="email" placeholder="Enter your email" />
+    <button>Notify me</button>
+  </div>
+  <div class="features">
+    <div class="feature">
+      <div class="icon">🎙️</div>
+      <h3>Audio Analysis</h3>
+      <p>Upload any audio file for a full emotion timeline</p>
+    </div>
+    <div class="feature">
+      <div class="icon">📈</div>
+      <h3>Shift Detection</h3>
+      <p>Pinpoint the exact moment emotions change</p>
+    </div>
+    <div class="feature">
+      <div class="icon">🧠</div>
+      <h3>AI Causality</h3>
+      <p>Understand why emotions shifted with causal triggers</p>
+    </div>
+    <div class="feature">
+      <div class="icon">⚡</div>
+      <h3>Developer API</h3>
+      <p>REST &amp; WebSocket API with pay-per-use pricing</p>
+    </div>
+  </div>
+  <footer>&copy; 2026 EmotionFlow &mdash; All rights reserved</footer>
+</body>
+</html>

@@ -34,7 +34,7 @@ class BillingEvent(Base):
     processing_time_ms = Column(Float, nullable=True)
 
     # ── Billing ──────────────────────────────────────────────────
-    cost_usd = Column(Float, nullable=False, default=0.0)    # tier rate × 1 job
+    compute_units = Column(Integer, nullable=False, default=0)  # CU consumed (0 for failed jobs)
 
     # ── Timestamps ───────────────────────────────────────────────
     occurred_at = Column(
@@ -52,5 +52,5 @@ class BillingEvent(Base):
     def __repr__(self):
         return (
             f"<BillingEvent job={self.job_id} user={self.user_id} "
-            f"tier={self.model_tier} cost=${self.cost_usd:.4f} status={self.status}>"
+            f"tier={self.model_tier} cu={self.compute_units} status={self.status}>"
         )

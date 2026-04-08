@@ -1,21 +1,10 @@
 """
 Audio-based Speech Emotion Recognition (SER) Service.
 
-Uses wav2vec2/HuBERT models fine-tuned on IEMOCAP (SUPERB benchmark) to detect
-emotion directly from the audio waveform — capturing tone, pitch, prosody,
-and vocal quality that text-only classifiers completely miss.
-
-Model options (ascending quality):
-  fast:     superb/wav2vec2-base-superb-er       (~360MB, 4 emotions, IEMOCAP)
-  balanced: superb/wav2vec2-base-superb-er       (~360MB, 4 emotions, IEMOCAP)
-  max:      ensemble of wav2vec2 + HuBERT-large  (fused)
+Detects emotion directly from the audio waveform — capturing tone, pitch,
+prosody, and vocal quality that text-only classifiers miss.
 
 Labels: ang (angry), hap (happy), neu (neutral), sad
-
-Tested on IEMOCAP ground-truth:
-  - Frustrated speech → angry 97-100% confidence
-  - Neutral speech → neutral 48-74% confidence
-  - Far superior to text-only classifiers (~13% random for all labels)
 """
 import logging
 import time
@@ -32,10 +21,7 @@ logger = logging.getLogger("emotionflow.audio_emotion")
 
 # ─── Model configuration ────────────────────────────────────────────────────
 
-# Primary model: wav2vec2-base fine-tuned on IEMOCAP (SUPERB benchmark) — 4 classes
-# Correctly detects angry/frustrated speech with 97-100% confidence
 AUDIO_MODEL_PRIMARY = "superb/wav2vec2-base-superb-er"
-# Secondary model: HuBERT-large fine-tuned on IEMOCAP — 4 classes, larger & more nuanced
 AUDIO_MODEL_HUBERT = "superb/hubert-large-superb-er"
 
 TIER_MODEL_MAP = {
@@ -44,7 +30,7 @@ TIER_MODEL_MAP = {
     "max":      [AUDIO_MODEL_PRIMARY, AUDIO_MODEL_HUBERT],
 }
 
-# Label mapping: SUPERB models output abbreviated IEMOCAP labels
+# Label mapping: abbreviated labels → full names
 LABEL_NORMALIZE = {
     "ang": "angry",
     "hap": "happy",
@@ -56,7 +42,6 @@ LABEL_NORMALIZE = {
     "neutral": "neutral",
 }
 
-# Target sample rate expected by wav2vec2
 TARGET_SR = 16000
 
 # ─── Module-level cache ─────────────────────────────────────────────────────

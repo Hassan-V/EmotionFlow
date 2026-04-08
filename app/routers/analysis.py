@@ -60,6 +60,20 @@ async def submit_analysis(
             detail=f"Daily quota exceeded ({user.quota_limit} analyses/day)",
         )
 
+    # Test account restrictions: fast tier only, max 5 jobs/day
+    if user.is_test_account:
+        if model_tier != "fast":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Test accounts are limited to the 'fast' tier",
+            )
+        TEST_ACCOUNT_DAILY_LIMIT = 5
+        if user.quota_used_today >= TEST_ACCOUNT_DAILY_LIMIT:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=f"Test account daily limit reached ({TEST_ACCOUNT_DAILY_LIMIT} analyses/day)",
+            )
+
     # Save file
     job_id = str(uuid.uuid4())
     safe_filename = f"{job_id}{ext}"

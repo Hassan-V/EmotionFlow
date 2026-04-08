@@ -44,7 +44,7 @@ export default function LandingPage() {
           <Link href="/login" className="border border-zinc-700 hover:bg-zinc-800 text-zinc-300 px-6 py-3 rounded-xl text-sm transition-colors">Sign in</Link>
         </div>
         <div className="mt-20 grid grid-cols-3 gap-4 max-w-2xl w-full">
-          {[{ name: "Fast", price: "$0.001", desc: "Quick sentiment" }, { name: "Balanced", price: "$0.005", desc: "Full analysis" }, { name: "Max", price: "$0.020", desc: "AI causality" }].map((t) => (
+          {[{ name: "Fast", price: "1 CU", desc: "Quick sentiment" }, { name: "Balanced", price: "5 CU", desc: "Full analysis" }, { name: "Max", price: "20 CU", desc: "AI causality" }].map((t) => (
             <div key={t.name} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-left">
               <p className="text-sm font-medium text-zinc-200">{t.name}</p>
               <p className="text-2xl font-bold text-violet-400 mt-1">{t.price}</p>

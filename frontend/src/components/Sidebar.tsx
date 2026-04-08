@@ -17,6 +17,7 @@ import {
   MessageSquare,
   Activity,
   Zap,
+  Code2,
 } from "lucide-react";
 
 const userNav = [
@@ -27,6 +28,7 @@ const userNav = [
   { href: "/billing", label: "Billing", icon: CreditCard },
   { href: "/profile", label: "Profile", icon: Settings },
   { href: "/discord-bot", label: "Discord Bot", icon: MessageSquare },
+  { href: "/developer", label: "Developer Docs", icon: Code2 },
 ];
 
 const adminNav = [

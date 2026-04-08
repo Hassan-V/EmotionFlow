@@ -143,6 +143,23 @@ async def toggle_user_active(
     return user
 
 
+@router.patch("/users/{user_id}/toggle-test", response_model=UserResponse)
+async def toggle_test_account(
+    user_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """Mark or unmark a user as a test account. Test accounts are limited to fast tier and 5 jobs/day."""
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.is_test_account = not user.is_test_account
+    await db.commit()
+    await db.refresh(user)
+    return user
+
+
 @router.get("/logs")
 async def get_recent_logs(
     count: int = Query(default=100, ge=1, le=1000),
@@ -211,9 +228,9 @@ async def get_billing_summary(
     Provides per-user and per-API-key breakdowns for the given month.
     Source of truth for dispute resolution — records are never modified.
 
-    Tier rates (USD per completed job):
-      fast=$0.001  balanced=$0.005  max=$0.020
-    Failed jobs are recorded at cost=$0.00.
+    Tier rates (compute units per completed job):
+      fast=1 CU  balanced=5 CU  max=20 CU
+    Failed jobs are recorded at compute_units=0.
     """
     now = datetime.now(timezone.utc)
     year = year or now.year
@@ -225,10 +242,10 @@ async def get_billing_summary(
         if month == 12
         else datetime(year, month + 1, 1, tzinfo=timezone.utc)
     )
-    tier_costs = {
-        "fast": settings.TIER_COST_FAST,
-        "balanced": settings.TIER_COST_BALANCED,
-        "max": settings.TIER_COST_MAX,
+    tier_cu = {
+        "fast": settings.TIER_CU_FAST,
+        "balanced": settings.TIER_CU_BALANCED,
+        "max": settings.TIER_CU_MAX,
     }
 
     # ── Per-user aggregates from BillingEvent ────────────────────
@@ -238,14 +255,7 @@ async def get_billing_summary(
             BillingEvent.model_tier,
             BillingEvent.status,
             func.count(BillingEvent.id).label("job_count"),
-            func.sum(BillingEvent.cost_usd).label("total_cost"),
-        )
-        .where(
-            BillingEvent.occurred_at >= period_start,
-            BillingEvent.occurred_at < period_end,
-        )
-        .group_by(BillingEvent.user_id, BillingEvent.model_tier, BillingEvent.status)
-    )
+            func.sum(BillingEvent.compute_units).label("total_cost"),
     aggregates = rows.all()
 
     # ── Per-key aggregates ───────────────────────────────────────
@@ -254,7 +264,7 @@ async def get_billing_summary(
             BillingEvent.api_key_id,
             BillingEvent.user_id,
             func.count(BillingEvent.id).label("job_count"),
-            func.sum(BillingEvent.cost_usd).label("total_cost"),
+            func.sum(BillingEvent.compute_units).label("total_cost"),
         )
         .where(
             BillingEvent.occurred_at >= period_start,
@@ -291,20 +301,20 @@ async def get_billing_summary(
                 "email": u.email if u else "deleted",
                 "jobs_completed": 0,
                 "jobs_failed": 0,
-                "total_cost_usd": 0.0,
+                "total_compute_units": 0,
                 "tier_breakdown": {},
             }
         tier = row.model_tier or "balanced"
         cost = float(row.total_cost or 0)
-        slot = by_user[uid]["tier_breakdown"].setdefault(tier, {"completed": 0, "failed": 0, "cost_usd": 0.0})
-        slot["cost_usd"] = round(slot["cost_usd"] + cost, 6)
+        slot = by_user[uid]["tier_breakdown"].setdefault(tier, {"completed": 0, "failed": 0, "compute_units": 0})
+        slot["compute_units"] = slot["compute_units"] + int(row.total_cost or 0)
         if row.status == "completed":
             by_user[uid]["jobs_completed"] += row.job_count
             slot["completed"] += row.job_count
         else:
             by_user[uid]["jobs_failed"] += row.job_count
             slot["failed"] += row.job_count
-        by_user[uid]["total_cost_usd"] = round(by_user[uid]["total_cost_usd"] + cost, 6)
+        by_user[uid]["total_compute_units"] = by_user[uid]["total_compute_units"] + int(row.total_cost or 0)
 
     # ── Build per-key structure ───────────────────────────────────
     by_key = []
@@ -317,17 +327,17 @@ async def get_billing_summary(
             "usage_count_total": k.usage_count if k else None,   # all-time from APIKey table
             "user_id": row.user_id,
             "jobs_this_period": row.job_count,
-            "cost_usd_this_period": round(float(row.total_cost or 0), 6),
+            "compute_units_this_period": int(row.total_cost or 0),
         })
-    by_key.sort(key=lambda x: x["cost_usd_this_period"], reverse=True)
+    by_key.sort(key=lambda x: x["compute_units_this_period"], reverse=True)
 
-    sorted_users = sorted(by_user.values(), key=lambda x: x["total_cost_usd"], reverse=True)
-    total_cost = round(sum(u["total_cost_usd"] for u in sorted_users), 6)
+    sorted_users = sorted(by_user.values(), key=lambda x: x["total_compute_units"], reverse=True)
+    total_cu = sum(u["total_compute_units"] for u in sorted_users)
 
     return {
         "period": f"{year}-{month:02d}",
-        "total_cost_usd": total_cost,
-        "tier_rates_usd": tier_costs,
+        "total_compute_units": total_cu,
+        "tier_rates_cu": tier_cu,
         "by_user": sorted_users,
         "by_api_key": by_key,
     }

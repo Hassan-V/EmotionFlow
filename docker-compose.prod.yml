@@ -22,7 +22,7 @@ services:
       - FRONTEND_URL=https://${DOMAIN}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
-      - CORS_ORIGINS=https://${DOMAIN}
+      - CORS_ORIGINS=https://${DOMAIN},https://dev.emotionflow.site
     volumes:
       - upload_data:/app/uploads
 
@@ -79,6 +79,8 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/certs:/etc/nginx/certs:ro
+      - ./nginx/coming-soon:/etc/nginx/coming-soon:ro
+      - /etc/nginx/.htpasswd:/etc/nginx/.htpasswd:ro
     depends_on:
       - api
       - frontend

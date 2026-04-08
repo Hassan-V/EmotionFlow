@@ -18,7 +18,7 @@ export default function AdminBillingPage() {
     queryFn: () => adminApi.billing(year, month),
   });
 
-  const totalRevenue = data?.by_user.reduce((acc, u) => acc + u.total_cost_usd, 0) ?? 0;
+  const totalCU = data?.by_user.reduce((acc, u) => acc + u.total_compute_units, 0) ?? 0;
 
   return (
     <AppShell>
@@ -51,15 +51,15 @@ export default function AdminBillingPage() {
       {/* Summary row */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         <Card>
-          <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Total revenue</p>
-          <p className="text-3xl font-bold text-emerald-400">${totalRevenue.toFixed(4)}</p>
+          <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Total compute units</p>
+          <p className="text-3xl font-bold text-emerald-400">{totalCU} CU</p>
           <p className="text-xs text-zinc-500 mt-1">
             {new Date(year, month - 1).toLocaleString("default", { month: "long" })} {year}
           </p>
         </Card>
         <Card>
           <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Paying users</p>
-          <p className="text-3xl font-bold">{data?.by_user.filter((u) => u.total_cost_usd > 0).length ?? 0}</p>
+          <p className="text-3xl font-bold">{data?.by_user.filter((u) => u.total_compute_units > 0).length ?? 0}</p>
         </Card>
         <Card>
           <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Total jobs</p>
@@ -86,7 +86,7 @@ export default function AdminBillingPage() {
                   <th className="text-left px-6 py-3">Completed</th>
                   <th className="text-left px-6 py-3">Failed</th>
                   <th className="text-left px-6 py-3">Tier breakdown</th>
-                  <th className="text-right px-6 py-3">Cost</th>
+                  <th className="text-right px-6 py-3">CU</th>
                 </tr>
               </thead>
               <tbody>
@@ -105,13 +105,13 @@ export default function AdminBillingPage() {
                             key={tier}
                             className={`text-xs px-2 py-0.5 rounded border ${TIER_INFO[tier as keyof typeof TIER_INFO]?.bg ?? "bg-zinc-800 border-zinc-700"} ${TIER_INFO[tier as keyof typeof TIER_INFO]?.color ?? "text-zinc-400"}`}
                           >
-                            {tier}: {info.jobs}×
+                            {tier}: {info.completed}×
                           </span>
                         ))}
                       </div>
                     </td>
                     <td className="px-6 py-3 text-right font-mono font-medium text-emerald-400">
-                      ${u.total_cost_usd.toFixed(4)}
+                      {u.total_compute_units} CU
                     </td>
                   </tr>
                 ))}

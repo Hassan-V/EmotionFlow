@@ -7,7 +7,7 @@ export interface User {
   full_name: string | null;
   role: "user" | "admin";
   is_active: boolean;
-  is_verified: boolean;
+  is_test_account: boolean;
   quota_limit: number;
   quota_used_today: number;
   created_at: string;
@@ -145,6 +145,7 @@ export interface UserAdminView {
   username: string;
   role: string;
   is_active: boolean;
+  is_test_account: boolean;
   quota_limit: number;
   quota_used_today: number;
   total_jobs: number;
@@ -154,6 +155,8 @@ export interface UserAdminView {
 export interface BillingSummary {
   year: number;
   month: number;
+  total_compute_units: number;
+  tier_rates_cu: Record<string, number>;
   by_user: BillingUserEntry[];
   by_api_key: BillingKeyEntry[];
 }
@@ -161,17 +164,17 @@ export interface BillingSummary {
 export interface BillingUserEntry {
   user_id: number;
   email: string;
-  total_cost_usd: number;
+  total_compute_units: number;
   jobs_completed: number;
   jobs_failed: number;
-  tier_breakdown: Record<string, { jobs: number; cost_usd: number }>;
+  tier_breakdown: Record<string, { completed: number; failed: number; compute_units: number }>;
 }
 
 export interface BillingKeyEntry {
   api_key_id: number;
   key_prefix: string;
   user_id: number;
-  total_cost_usd: number;
+  compute_units_this_period: number;
   jobs_in_period: number;
   usage_count_total: number;
 }

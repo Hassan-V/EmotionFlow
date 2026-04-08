@@ -1,7 +1,7 @@
 """
 AI Worker Process — Runs separately from the API.
 Pulls jobs from Redis queue, processes audio files through the real AI pipeline:
-  1. Whisper ASR → transcript with timestamps
+  1. ASR → transcript with timestamps
   2. Emotion classification → per-segment emotion labels + intensities
   3. Gemini causality → trigger phrases, causal explanations, transitions
   4. Session memory → persist context for multi-turn analysis
@@ -186,8 +186,8 @@ def process_audio_file(
     }
 
 
-# ── Tier cost map (must stay in sync with config.py TIER_COST_* values) ─
-_TIER_COSTS = {"fast": 0.001, "balanced": 0.005, "max": 0.020}
+# ── Tier compute unit map (must stay in sync with config.py TIER_CU_* values) ─
+_TIER_CU = {"fast": 1, "balanced": 5, "max": 20}
 
 
 def _write_billing_event(
@@ -200,15 +200,15 @@ def _write_billing_event(
     processing_time_ms: float,
     audio_duration_s,
     file_size_bytes,
-    cost_override: float = None,
+    cu_override: int = None,
 ):
     """
     Write one immutable BillingEvent row.
     Called after every job — success and failure — for the audit ledger.
-    Failed jobs record cost=0.0 (no charge for failures).
+    Failed jobs record compute_units=0 (no charge for failures).
     """
     from app.models.billing import BillingEvent
-    cost = cost_override if cost_override is not None else _TIER_COSTS.get(model_tier, 0.005)
+    cu = cu_override if cu_override is not None else _TIER_CU.get(model_tier, 5)
     try:
         with SessionLocal() as db:
             event = BillingEvent(
@@ -220,11 +220,11 @@ def _write_billing_event(
                 audio_duration_s=audio_duration_s,
                 status=status,
                 processing_time_ms=processing_time_ms,
-                cost_usd=cost,
+                compute_units=cu,
             )
             db.add(event)
             db.commit()
-        logger.info(f"BillingEvent written: job={job_id} tier={model_tier} cost=${cost:.4f} status={status}")
+        logger.info(f"BillingEvent written: job={job_id} tier={model_tier} cu={cu} status={status}")
     except Exception as be:
         logger.error(f"Failed to write BillingEvent for job {job_id}: {be}")
 
@@ -424,7 +424,7 @@ async def worker_loop():
                     processing_time_ms=processing_time_ms,
                     audio_duration_s=None,
                     file_size_bytes=None,
-                    cost_override=0.0,  # failed jobs don't cost
+                    cu_override=0,  # failed jobs don't consume CU
                 )
 
                 # Publish webhook event for failure

@@ -1,6 +1,5 @@
 """
-Gemini Causality Service — Uses Gemini 2.5 Pro for causal reasoning
-over transcript segments with detected emotions.
+Gemini Causality Service — Causal reasoning over transcript segments with detected emotions.
 
 Responsibilities:
   1. Identify trigger phrases within each segment that caused the emotion
@@ -22,8 +21,8 @@ logger = logging.getLogger("emotionflow.gemini")
 
 # Model fallback chain: try best first, fall back on quota/rate errors
 MODEL_CHAIN = [
-    "gemini-2.5-flash",     # Best free-tier reasoning model
-    "gemini-2.0-flash",     # Fallback
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
 ]
 DEFAULT_MODEL = MODEL_CHAIN[0]
 

@@ -20,6 +20,7 @@ export default function WebhooksPage() {
   const [expanded, setExpanded] = useState<number | null>(null);
   const [form, setForm] = useState({ url: "", name: "", events: ["job.completed", "job.failed"] });
   const [createdSecret, setCreatedSecret] = useState<{ id: number; secret: string } | null>(null);
+  const [testResult, setTestResult] = useState<{ id: number; success: boolean; status_code: number | null; error: string | null } | null>(null);
 
   const { data: webhooks = [], isLoading } = useQuery({
     queryKey: ["webhooks"],
@@ -43,6 +44,8 @@ export default function WebhooksPage() {
 
   const testMutation = useMutation({
     mutationFn: (id: number) => webhooksApi.test(id),
+    onSuccess: (data, id) => setTestResult({ id, error: null, ...data }),
+    onError: (_err, id) => setTestResult({ id, success: false, status_code: null, error: "Request failed" }),
   });
 
   const toggleEvent = (event: string) => {
@@ -142,12 +145,17 @@ export default function WebhooksPage() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={(e) => { e.stopPropagation(); testMutation.mutate(wh.id); }}
-                    loading={testMutation.isPending}
+                    onClick={(e) => { e.stopPropagation(); setTestResult(null); testMutation.mutate(wh.id); }}
+                    loading={testMutation.isPending && testMutation.variables === wh.id}
                   >
                     <Send className="w-3 h-3" />
                     Test
                   </Button>
+                  {testResult?.id === wh.id && (
+                    <span className={`text-xs px-2 py-1 rounded-md font-medium ${testResult.success ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>
+                      {testResult.success ? `✓ ${testResult.status_code}` : testResult.error ?? `✗ ${testResult.status_code ?? "error"}`}
+                    </span>
+                  )}
                   <Button
                     variant="danger"
                     size="sm"

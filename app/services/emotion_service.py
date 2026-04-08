@@ -2,18 +2,9 @@
 Emotion Classification Service — Transformer-based emotion detection on text segments.
 
 Tiers:
-  fast:     j-hartmann/emotion-english-distilroberta-base  (6 emotions, fast)
-  balanced: SamLowe/roberta-base-go_emotions               (28 emotions, richer)
-  max:      ensemble of both models
-
-Emotions (fast tier / Ekman):
-  anger, disgust, fear, joy, neutral, sadness, surprise
-
-Emotions (balanced tier / GoEmotions):
-  admiration, amusement, anger, annoyance, approval, caring, confusion,
-  curiosity, desire, disappointment, disapproval, disgust, embarrassment,
-  excitement, fear, gratitude, grief, joy, love, nervousness, optimism,
-  pride, realization, relief, remorse, sadness, surprise, neutral
+  fast:      6 emotions
+  balanced:  28 emotions
+  max:       ensemble of both
 """
 import logging
 import time
@@ -23,7 +14,6 @@ from transformers import pipeline, Pipeline
 
 logger = logging.getLogger("emotionflow.emotion")
 
-# Tier -> model(s)
 TIER_MODEL_MAP = {
     "fast": ["j-hartmann/emotion-english-distilroberta-base"],
     "balanced": ["SamLowe/roberta-base-go_emotions"],

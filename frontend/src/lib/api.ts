@@ -51,6 +51,13 @@ export function loadTokensFromStorage() {
   }
 }
 
+export function getAccessToken(): string | null {
+  if (!_access && typeof window !== "undefined") {
+    _access = localStorage.getItem("ef_access");
+  }
+  return _access;
+}
+
 // ─── Axios interceptors ───────────────────────────────────────────────────────
 
 api.interceptors.request.use((config) => {
@@ -170,6 +177,7 @@ export const adminApi = {
   updateQuota: (userId: number, quota: number) =>
     api.patch<User>(`/admin/users/${userId}/quota`, { quota_limit: quota }).then((r) => r.data),
   toggleUser: (userId: number) => api.patch<User>(`/admin/users/${userId}/toggle-active`).then((r) => r.data),
+  toggleTestUser: (userId: number) => api.patch<User>(`/admin/users/${userId}/toggle-test`).then((r) => r.data),
   billing: (year: number, month: number) =>
     api.get<BillingSummary>("/admin/billing/summary", { params: { year, month } }).then((r) => r.data),
   logs: (count?: number) =>

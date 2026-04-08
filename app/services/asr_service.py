@@ -1,13 +1,5 @@
 """
 ASR Service — Whisper-based speech-to-text with multi-tier model support.
-
-Tiers:
-  fast:     whisper tiny    (~39M params,  ~1GB VRAM)
-  balanced: whisper small   (~244M params, ~2GB VRAM)
-  max:      whisper medium  (~769M params, ~5GB VRAM)
-
-We avoid large-v3 (~1.5B) because 6GB VRAM on 1660 Super won't fit it
-alongside the emotion model. Medium is the practical ceiling.
 """
 import logging
 import time
@@ -18,7 +10,6 @@ import whisper
 
 logger = logging.getLogger("emotionflow.asr")
 
-# Tier -> Whisper model name
 TIER_MODEL_MAP = {
     "fast": "tiny",
     "balanced": "small",
@@ -36,7 +27,7 @@ def _get_device() -> str:
 
 
 def load_model(tier: str) -> whisper.Whisper:
-    """Load and cache a Whisper model for the given tier."""
+    """Load and cache the model for the given tier."""
     model_name = TIER_MODEL_MAP.get(tier, "small")
 
     if model_name in _loaded_models:

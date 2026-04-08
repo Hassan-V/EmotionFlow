@@ -63,6 +63,7 @@ class UserResponse(BaseModel):
     role: str
     is_active: bool
     is_verified: bool = False
+    is_test_account: bool = False
     quota_limit: int
     quota_used_today: int
     created_at: datetime

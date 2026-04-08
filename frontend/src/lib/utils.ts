@@ -81,22 +81,22 @@ export function emotionColor(emotion: string): string {
 export const TIER_INFO = {
   fast: {
     label: "Fast",
-    cost: "$0.001",
+    cost: "1 CU",
     desc: "Quick sentiment, ~10s processing",
     color: "text-emerald-400",
     bg: "bg-emerald-400/10 border-emerald-400/20",
   },
   balanced: {
     label: "Balanced",
-    cost: "$0.005",
+    cost: "5 CU",
     desc: "Full analysis with transcript, ~30s",
     color: "text-blue-400",
     bg: "bg-blue-400/10 border-blue-400/20",
   },
   max: {
     label: "Max",
-    cost: "$0.020",
-    desc: "Deep causality via Gemini AI, ~60s",
+    cost: "20 CU",
+    desc: "Deep causality via AI, ~60s",
     color: "text-violet-400",
     bg: "bg-violet-400/10 border-violet-400/20",
   },

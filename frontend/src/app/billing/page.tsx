@@ -21,9 +21,9 @@ export default function BillingPage() {
   });
 
   const completed = jobs.filter((j) => j.status === "completed");
-  const totalCost = completed.reduce((acc, j) => {
-    const tierCosts = { fast: 0.001, balanced: 0.005, max: 0.020 };
-    return acc + (tierCosts[j.model_tier] ?? 0);
+  const totalCU = completed.reduce((acc, j) => {
+    const tierCU = { fast: 1, balanced: 5, max: 20 };
+    return acc + (tierCU[j.model_tier as keyof typeof tierCU] ?? 0);
   }, 0);
 
   const tierCounts = jobs.reduce<Record<string, number>>((acc, j) => {
@@ -41,8 +41,8 @@ export default function BillingPage() {
       {/* Summary cards */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         <Card>
-          <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Estimated cost (all time)</p>
-          <p className="text-3xl font-bold text-violet-400">${totalCost.toFixed(4)}</p>
+          <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Compute units used</p>
+          <p className="text-3xl font-bold text-violet-400">{totalCU} CU</p>
           <p className="text-xs text-zinc-500 mt-1">Based on {completed.length} completed jobs</p>
         </Card>
         <Card>
@@ -98,15 +98,15 @@ export default function BillingPage() {
                 <th className="text-left px-6 py-3">Job ID</th>
                 <th className="text-left px-6 py-3">Tier</th>
                 <th className="text-left px-6 py-3">Status</th>
-                <th className="text-left px-6 py-3">Cost</th>
+                <th className="text-left px-6 py-3">CU</th>
                 <th className="text-left px-6 py-3">Processing</th>
                 <th className="text-left px-6 py-3">Created</th>
               </tr>
             </thead>
             <tbody>
               {jobs.map((job: Job) => {
-                const tierCosts = { fast: 0.001, balanced: 0.005, max: 0.020 };
-                const cost = job.status === "completed" ? tierCosts[job.model_tier] ?? 0 : 0;
+                const tierCU = { fast: 1, balanced: 5, max: 20 };
+                const cu = job.status === "completed" ? tierCU[job.model_tier as keyof typeof tierCU] ?? 0 : 0;
                 return (
                   <tr key={job.job_id} className="border-b border-zinc-800/50 hover:bg-zinc-800/20">
                     <td className="px-6 py-3">
@@ -121,7 +121,7 @@ export default function BillingPage() {
                     </td>
                     <td className="px-6 py-3"><StatusBadge status={job.status} /></td>
                     <td className="px-6 py-3 text-xs font-mono">
-                      {job.status === "completed" ? `$${cost.toFixed(3)}` : "—"}
+                      {job.status === "completed" ? `${cu} CU` : "—"}
                     </td>
                     <td className="px-6 py-3 text-xs text-zinc-400">
                       {job.processing_time_ms ? formatMs(job.processing_time_ms) : "—"}

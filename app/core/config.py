@@ -51,10 +51,10 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""
 
-    # Billing (simulated cost per completed job, USD)
-    TIER_COST_FAST: float = 0.001
-    TIER_COST_BALANCED: float = 0.005
-    TIER_COST_MAX: float = 0.020
+    # Billing (compute units consumed per completed job)
+    TIER_CU_FAST: int = 1
+    TIER_CU_BALANCED: int = 5
+    TIER_CU_MAX: int = 20
 
     model_config = {
         "env_file": ".env",

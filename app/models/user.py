@@ -17,6 +17,7 @@ class User(Base):
     role = Column(String(20), nullable=False, default="user")  # user, admin
     is_active = Column(Boolean, default=True, nullable=False)
     is_verified = Column(Boolean, default=False, nullable=False)
+    is_test_account = Column(Boolean, default=False, nullable=False)  # test/demo accounts — limited to fast tier, max 5 jobs/day
     google_id = Column(String(255), unique=True, nullable=True, index=True)
 
     # Quota tracking

@@ -34,6 +34,11 @@ export default function AdminUsersPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-users"] }),
   });
 
+  const toggleTestMutation = useMutation({
+    mutationFn: (id: number) => adminApi.toggleTestUser(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-users"] }),
+  });
+
   const filtered = users.filter(
     (u: UserAdminView) =>
       u.email.toLowerCase().includes(search.toLowerCase()) ||
@@ -82,6 +87,7 @@ export default function AdminUsersPage() {
                   <td className="px-6 py-3">
                     <p className="font-medium">{u.username}</p>
                     <p className="text-xs text-zinc-500">{u.email}</p>
+                    {u.is_test_account && <span className="text-xs text-yellow-400 font-medium">test</span>}
                   </td>
                   <td className="px-6 py-3 capitalize text-xs text-zinc-400">{u.role}</td>
                   <td className="px-6 py-3">
@@ -113,17 +119,27 @@ export default function AdminUsersPage() {
                   </td>
                   <td className="px-6 py-3 text-xs text-zinc-500">{formatDate(u.created_at)}</td>
                   <td className="px-6 py-3 text-right">
-                    <Button
-                      variant={u.is_active ? "danger" : "secondary"}
-                      size="sm"
-                      loading={toggleMutation.isPending}
-                      onClick={() => {
-                        if (confirm(`${u.is_active ? "Disable" : "Enable"} user ${u.username}?`))
-                          toggleMutation.mutate(u.id);
-                      }}
-                    >
-                      {u.is_active ? "Disable" : "Enable"}
-                    </Button>
+                    <div className="flex items-center justify-end gap-2">
+                      <Button
+                        variant={u.is_test_account ? "secondary" : "ghost"}
+                        size="sm"
+                        loading={toggleTestMutation.isPending}
+                        onClick={() => toggleTestMutation.mutate(u.id)}
+                      >
+                        {u.is_test_account ? "Unmark Test" : "Mark Test"}
+                      </Button>
+                      <Button
+                        variant={u.is_active ? "danger" : "secondary"}
+                        size="sm"
+                        loading={toggleMutation.isPending}
+                        onClick={() => {
+                          if (confirm(`${u.is_active ? "Disable" : "Enable"} user ${u.username}?`))
+                            toggleMutation.mutate(u.id);
+                        }}
+                      >
+                        {u.is_active ? "Disable" : "Enable"}
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
