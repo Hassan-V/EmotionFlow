@@ -312,7 +312,6 @@ async def get_billing_summary(
                 "tier_breakdown": {},
             }
         tier = row.model_tier or "balanced"
-        cost = float(row.total_cost or 0)
         slot = by_user[uid]["tier_breakdown"].setdefault(tier, {"completed": 0, "failed": 0, "compute_units": 0})
         slot["compute_units"] = slot["compute_units"] + int(row.total_cost or 0)
         if row.status == "completed":
