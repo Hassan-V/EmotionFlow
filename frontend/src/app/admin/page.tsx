@@ -153,17 +153,27 @@ export default function AdminPage() {
             </div>
           ) : (
             <div className="space-y-2">
-              {workerStatus.workers.map((w) => (
+              {workerStatus.workers.map((w, i) => {
+                const parts = w.id.split("-");
+                const pid = parts[parts.length - 1];
+                const host = parts.slice(0, -1).join("-").slice(0, 8);
+                const ago = Math.max(0, w.last_seen_ago_s);
+                const agoLabel = ago < 2 ? "just now" : `${ago}s ago`;
+                return (
                 <div key={w.id} className="flex items-center gap-3 py-2 border-t border-zinc-800 first:border-0">
                   <Cpu className="w-4 h-4 text-violet-400 shrink-0" />
-                  <span className="font-mono text-xs text-zinc-300 flex-1 truncate">{w.id}</span>
-                  <span className="text-xs text-zinc-500">last seen {w.last_seen_ago_s}s ago</span>
+                  <span className="text-sm text-zinc-300 flex-1">
+                    Worker {i + 1}
+                    <span className="ml-2 font-mono text-xs text-zinc-500" title={w.id}>{host}… · PID {pid}</span>
+                  </span>
+                  <span className="text-xs text-zinc-500">{agoLabel}</span>
                   <span className="flex items-center gap-1 text-xs text-emerald-400">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
                     alive
                   </span>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </Card>
