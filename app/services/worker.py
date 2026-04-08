@@ -233,7 +233,6 @@ async def worker_loop():
     """Main worker loop — pulls jobs from Redis and processes them."""
     import redis.asyncio as aioredis
     import socket
-    import uuid as _uuid
     from app.core.config import get_settings
 
     # Import all ORM models upfront so SQLAlchemy can configure all mappers
