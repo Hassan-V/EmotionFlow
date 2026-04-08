@@ -232,6 +232,8 @@ def _write_billing_event(
 async def worker_loop():
     """Main worker loop — pulls jobs from Redis and processes them."""
     import redis.asyncio as aioredis
+    import socket
+    import uuid as _uuid
     from app.core.config import get_settings
 
     # Import all ORM models upfront so SQLAlchemy can configure all mappers
@@ -246,11 +248,19 @@ async def worker_loop():
     sync_redis = get_sync_redis()
     SessionLocal = get_sync_db()
 
-    logger.info("Worker started. Waiting for jobs...")
+    # Stable worker ID for this process lifetime
+    worker_id = f"{socket.gethostname()}-{os.getpid()}"
+    HEARTBEAT_KEY = f"worker:heartbeat:{worker_id}"
+    HEARTBEAT_TTL = 30  # seconds — if no heartbeat for 30s, considered dead
+
+    logger.info(f"Worker started (id={worker_id}). Waiting for jobs...")
     logger.info(f"Gemini API key: {'set' if settings.GEMINI_API_KEY else 'NOT SET'}")
 
     while True:
         try:
+            # Heartbeat — mark this worker as alive with a 30s TTL
+            await async_redis.setex(HEARTBEAT_KEY, HEARTBEAT_TTL, int(time.time()))
+
             # Blocking pop with 5s timeout
             result = await async_redis.brpop("analysis:jobs", timeout=5)
             if not result:

@@ -8,7 +8,7 @@ import { adminApi } from "@/lib/api";
 import { AppShell } from "@/components/AppShell";
 import { Card, StatCard } from "@/components/ui/Card";
 import {
-  Users, Activity, CheckCircle, XCircle, Clock, Zap, AlertTriangle,
+  Users, Activity, CheckCircle, XCircle, Clock, Zap, AlertTriangle, Cpu,
 } from "lucide-react";
 import { formatMs } from "@/lib/utils";
 
@@ -24,6 +24,12 @@ export default function AdminPage() {
     queryKey: ["admin-telemetry"],
     queryFn: adminApi.telemetry,
     refetchInterval: 15_000,
+  });
+
+  const { data: workerStatus } = useQuery({
+    queryKey: ["admin-workers"],
+    queryFn: adminApi.workers,
+    refetchInterval: 10_000,
   });
 
   if (isLoading || !tel) {
@@ -72,8 +78,7 @@ export default function AdminPage() {
       <div className="grid grid-cols-2 gap-6">
         {/* Job breakdown */}
         <Card>
-          <h2 className="text-sm font-semibold mb-4">Job breakdown</h2>
-          <div className="space-y-3">
+          <h2 className="text-sm font-semibold mb-4">Job breakdown</h2>          <div className="space-y-3">
             {[
               { label: "Total",     value: tel.total_analysis_jobs,  color: "bg-zinc-600" },
               { label: "Completed", value: tel.jobs_completed,        color: "bg-emerald-500" },
@@ -128,6 +133,39 @@ export default function AdminPage() {
               </span>
             </div>
           </div>
+        </Card>
+      </div>
+
+      {/* Workers */}
+      <div className="mt-6">
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold">Workers</h2>
+            <div className="flex items-center gap-4 text-xs text-zinc-500">
+              <span>Queue depth: <span className="font-medium text-zinc-300">{workerStatus?.queue_depth ?? "—"}</span></span>
+              <span>{workerStatus?.worker_count ?? 0} active</span>
+            </div>
+          </div>
+          {!workerStatus || workerStatus.workers.length === 0 ? (
+            <div className="flex items-center gap-3 text-sm text-zinc-500 py-2">
+              <XCircle className="w-4 h-4 text-red-400" />
+              No workers online
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {workerStatus.workers.map((w) => (
+                <div key={w.id} className="flex items-center gap-3 py-2 border-t border-zinc-800 first:border-0">
+                  <Cpu className="w-4 h-4 text-violet-400 shrink-0" />
+                  <span className="font-mono text-xs text-zinc-300 flex-1 truncate">{w.id}</span>
+                  <span className="text-xs text-zinc-500">last seen {w.last_seen_ago_s}s ago</span>
+                  <span className="flex items-center gap-1 text-xs text-emerald-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+                    alive
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </Card>
       </div>
     </AppShell>

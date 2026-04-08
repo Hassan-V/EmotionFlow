@@ -182,6 +182,8 @@ export const adminApi = {
     api.get<BillingSummary>("/admin/billing/summary", { params: { year, month } }).then((r) => r.data),
   logs: (count?: number) =>
     api.get<{ logs: unknown[]; count: number }>("/admin/logs", { params: { count } }).then((r) => r.data),
+  workers: () =>
+    api.get<{ workers: { id: string; status: string; last_seen_ago_s: number; ttl_s: number }[]; worker_count: number; queue_depth: number }>("/admin/workers").then((r) => r.data),
 };
 
 // ─── Health ───────────────────────────────────────────────────────────────────

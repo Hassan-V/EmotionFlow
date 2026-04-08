@@ -348,3 +348,42 @@ async def get_billing_summary(
         "by_api_key": by_key,
     }
 
+
+@router.get("/workers")
+async def get_worker_status():
+    """
+    Return live worker status from Redis heartbeats + queue depth.
+    Workers write SETEX worker:heartbeat:<id> every poll cycle (TTL=30s).
+    If the key is gone the worker is considered dead.
+    """
+    import time as _time
+    now = int(_time.time())
+
+    try:
+        # Scan for all heartbeat keys
+        keys = [k async for k in redis_client.scan_iter("worker:heartbeat:*")]
+        workers = []
+        for key in keys:
+            val = await redis_client.get(key)
+            worker_id = key.replace("worker:heartbeat:", "")
+            last_seen_ts = int(val) if val else 0
+            ttl = await redis_client.ttl(key)
+            workers.append({
+                "id": worker_id,
+                "status": "alive",
+                "last_seen_ago_s": now - last_seen_ts,
+                "ttl_s": ttl,
+            })
+
+        # Queue depth — jobs waiting to be picked up
+        queue_depth = await redis_client.llen("analysis:jobs")
+
+        return {
+            "workers": workers,
+            "worker_count": len(workers),
+            "queue_depth": queue_depth,
+        }
+    except Exception as e:
+        logger.error(f"Failed to read worker status: {e}")
+        raise HTTPException(status_code=500, detail="Failed to read worker status")
+
