@@ -15,3 +15,4 @@ model_cache/
 node_modules/
 frontend/.next/
 nginx/certs/
+seed_demo_users.py

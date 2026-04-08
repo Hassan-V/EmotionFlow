@@ -79,6 +79,12 @@ async def login(data: UserLogin, db: AsyncSession = Depends(get_db)):
             detail="Account is disabled",
         )
 
+    if not user.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Email address not verified. Please check your inbox.",
+        )
+
     access_token = create_access_token(data={"sub": str(user.id)})
     refresh_token = create_refresh_token(data={"sub": str(user.id)})
 
