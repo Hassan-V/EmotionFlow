@@ -69,7 +69,7 @@ services:
     depends_on:
       - api
 
-  # Nginx reverse proxy (self-signed cert for Cloudflare Full SSL)
+  # Nginx reverse proxy
   nginx:
     image: nginx:alpine
     container_name: emotionflow-nginx
@@ -81,6 +81,7 @@ services:
       - ./nginx/certs:/etc/nginx/certs:ro
       - ./nginx/coming-soon:/etc/nginx/coming-soon:ro
       - /etc/nginx/.htpasswd:/etc/nginx/.htpasswd:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - api
       - frontend
