@@ -256,6 +256,13 @@ async def get_billing_summary(
             BillingEvent.status,
             func.count(BillingEvent.id).label("job_count"),
             func.sum(BillingEvent.compute_units).label("total_cost"),
+        )
+        .where(
+            BillingEvent.occurred_at >= period_start,
+            BillingEvent.occurred_at < period_end,
+        )
+        .group_by(BillingEvent.user_id, BillingEvent.model_tier, BillingEvent.status)
+    )
     aggregates = rows.all()
 
     # ── Per-key aggregates ───────────────────────────────────────
