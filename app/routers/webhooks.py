@@ -2,6 +2,7 @@
 Webhook CRUD Router — Register, update, delete, and inspect webhooks.
 """
 import secrets
+from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
@@ -39,6 +40,23 @@ async def create_webhook(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Maximum {MAX_WEBHOOKS_PER_USER} webhooks per user",
+        )
+
+    # Probe the endpoint — reject registration if no 2xx response
+    from app.services.webhook_service import deliver_webhook as _probe
+    probe = await _probe(
+        url=data.url,
+        secret=secrets.token_hex(32),
+        event_type="webhook.validation",
+        job_id="00000000-0000-0000-0000-000000000000",
+        timestamp=datetime.now(timezone.utc).isoformat(),
+        data={"message": "EmotionFlow webhook endpoint validation"},
+    )
+    if not probe["success"]:
+        detail = probe.get("error") or f"endpoint returned HTTP {probe.get('status_code')}"
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Endpoint validation failed: {detail}",
         )
 
     # Generate a signing secret
@@ -94,6 +112,23 @@ async def update_webhook(
 ):
     """Update a webhook's URL, events, name, or active status."""
     webhook = await _get_user_webhook(db, webhook_id, user.id)
+
+    if data.url is not None and data.url != webhook.url:
+        from app.services.webhook_service import deliver_webhook as _probe
+        probe = await _probe(
+            url=data.url,
+            secret=secrets.token_hex(32),
+            event_type="webhook.validation",
+            job_id="00000000-0000-0000-0000-000000000000",
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            data={"message": "EmotionFlow webhook endpoint validation"},
+        )
+        if not probe["success"]:
+            detail = probe.get("error") or f"endpoint returned HTTP {probe.get('status_code')}"
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Endpoint validation failed: {detail}",
+            )
 
     if data.name is not None:
         webhook.name = data.name

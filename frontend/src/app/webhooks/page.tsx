@@ -21,6 +21,7 @@ export default function WebhooksPage() {
   const [form, setForm] = useState({ url: "", name: "", events: ["job.completed", "job.failed"] });
   const [createdSecret, setCreatedSecret] = useState<{ id: number; secret: string } | null>(null);
   const [testResult, setTestResult] = useState<{ id: number; success: boolean; status_code: number | null; error: string | null } | null>(null);
+  const [createError, setCreateError] = useState<string | null>(null);
 
   const { data: webhooks = [], isLoading } = useQuery({
     queryKey: ["webhooks"],
@@ -32,8 +33,13 @@ export default function WebhooksPage() {
     onSuccess: (data) => {
       if (data.secret) setCreatedSecret({ id: data.id, secret: data.secret });
       setShowCreate(false);
+      setCreateError(null);
       setForm({ url: "", name: "", events: ["job.completed", "job.failed"] });
       qc.invalidateQueries({ queryKey: ["webhooks"] });
+    },
+    onError: (err: unknown) => {
+      const axiosDetail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
+      setCreateError(axiosDetail ?? "Failed to register webhook");
     },
   });
 
@@ -111,10 +117,13 @@ export default function WebhooksPage() {
             </div>
             <div className="flex gap-2">
               <Button onClick={() => createMutation.mutate()} loading={createMutation.isPending} disabled={!form.url}>
-                Create webhook
+                {createMutation.isPending ? "Validating endpoint…" : "Create webhook"}
               </Button>
-              <Button variant="ghost" onClick={() => setShowCreate(false)}>Cancel</Button>
+              <Button variant="ghost" onClick={() => { setShowCreate(false); setCreateError(null); }}>Cancel</Button>
             </div>
+            {createError && (
+              <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">{createError}</p>
+            )}
           </div>
         </Card>
       )}

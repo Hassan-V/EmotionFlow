@@ -217,6 +217,11 @@ class ErrorResponse(BaseModel):
 VALID_WEBHOOK_EVENTS = {"job.completed", "job.failed", "job.processing"}
 
 
+_BLOCKED_WEBHOOK_HOSTS = frozenset({
+    "localhost", "api", "frontend", "postgres", "redis", "worker", "db",
+})
+
+
 class WebhookCreate(BaseModel):
     url: str = Field(..., max_length=2048)
     name: str = Field(default="Default Webhook", max_length=100)
@@ -225,9 +230,23 @@ class WebhookCreate(BaseModel):
     @field_validator("url")
     @classmethod
     def validate_url(cls, v):
-        if not v.startswith(("https://", "http://")):
-            raise ValueError("Webhook URL must start with https:// or http://")
-        return v.strip()
+        import ipaddress
+        from urllib.parse import urlparse
+        v = v.strip()
+        if not v.startswith("https://"):
+            raise ValueError("Webhook URL must use HTTPS (https://)")
+        host = (urlparse(v).hostname or "").lower()
+        if host in _BLOCKED_WEBHOOK_HOSTS:
+            raise ValueError("Webhook URL cannot target an internal host")
+        try:
+            ip = ipaddress.ip_address(host)
+            if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast:
+                raise ValueError("Webhook URL cannot use a private or reserved IP address")
+        except ValueError as exc:
+            if "Webhook URL" in str(exc):
+                raise
+            # Not an IP literal — hostname is fine at schema level
+        return v
 
     @field_validator("events")
     @classmethod
@@ -249,9 +268,24 @@ class WebhookUpdate(BaseModel):
     @field_validator("url")
     @classmethod
     def validate_url(cls, v):
-        if v is not None and not v.startswith(("https://", "http://")):
-            raise ValueError("Webhook URL must start with https:// or http://")
-        return v.strip() if v else v
+        if v is None:
+            return v
+        import ipaddress
+        from urllib.parse import urlparse
+        v = v.strip()
+        if not v.startswith("https://"):
+            raise ValueError("Webhook URL must use HTTPS (https://)")
+        host = (urlparse(v).hostname or "").lower()
+        if host in _BLOCKED_WEBHOOK_HOSTS:
+            raise ValueError("Webhook URL cannot target an internal host")
+        try:
+            ip = ipaddress.ip_address(host)
+            if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast:
+                raise ValueError("Webhook URL cannot use a private or reserved IP address")
+        except ValueError as exc:
+            if "Webhook URL" in str(exc):
+                raise
+        return v
 
     @field_validator("events")
     @classmethod

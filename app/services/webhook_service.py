@@ -16,10 +16,13 @@ HMAC-SHA256 signing:
 """
 import hashlib
 import hmac
+import ipaddress
 import json
 import logging
+import socket
 from datetime import datetime, timezone, timedelta
 from typing import Optional
+from urllib.parse import urlparse
 
 import httpx
 
@@ -31,6 +34,37 @@ CONSUMER_GROUP = "webhook-dispatchers"
 # Retry backoff: attempt 1→30s, 2→60s, 3→120s, 4→300s, 5→give up
 RETRY_DELAYS = [30, 60, 120, 300]
 DELIVERY_TIMEOUT = 10  # seconds per HTTP request
+
+_BLOCKED_WEBHOOK_HOSTS = frozenset({
+    "localhost", "api", "frontend", "postgres", "redis", "worker", "db",
+})
+
+
+async def _check_ssrf(url: str) -> Optional[str]:
+    """Return an error string if the URL is an SSRF risk, else None."""
+    import asyncio
+    host = (urlparse(url).hostname or "").lower()
+    if not host:
+        return "Could not parse hostname"
+    if host in _BLOCKED_WEBHOOK_HOSTS:
+        return "Internal hostname is not allowed"
+    # If host is an IP literal, check it directly
+    try:
+        ip = ipaddress.ip_address(host)
+        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast:
+            return "Private or reserved IP address is not allowed"
+    except ValueError:
+        pass  # Not an IP literal — resolve via DNS below
+    try:
+        loop = asyncio.get_event_loop()
+        infos = await loop.run_in_executor(None, socket.getaddrinfo, host, None)
+        for info in infos:
+            ip = ipaddress.ip_address(info[4][0])
+            if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast:
+                return "Hostname resolves to a private or reserved IP address"
+    except (OSError, ValueError):
+        return "Could not resolve hostname"
+    return None
 
 
 def sign_payload(payload_bytes: bytes, secret: str) -> str:
@@ -101,6 +135,11 @@ async def deliver_webhook(
     """
     Deliver a single webhook. Returns delivery result dict.
     """
+    ssrf_err = await _check_ssrf(url)
+    if ssrf_err:
+        logger.warning(f"SSRF blocked delivery to {url}: {ssrf_err}")
+        return {"success": False, "status_code": None, "response_body": None, "error": ssrf_err}
+
     payload = {
         "event": event_type,
         "job_id": job_id,
