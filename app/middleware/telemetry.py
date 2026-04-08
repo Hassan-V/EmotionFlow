@@ -61,7 +61,7 @@ class TelemetryMiddleware(BaseHTTPMiddleware):
                 maxlen=50000,
             )
             await redis_client.incr("telemetry:total_requests")
-            if status_code >= 400:
+            if status_code >= 500:
                 await redis_client.incr("telemetry:error_count")
             if user_id:
                 await redis_client.incr(f"telemetry:user:{user_id}:requests")

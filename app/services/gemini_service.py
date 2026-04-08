@@ -15,7 +15,7 @@ from typing import Optional
 
 from google import genai
 from google.genai import types
-from google.genai.errors import ClientError
+from google.genai.errors import ClientError, ServerError
 
 logger = logging.getLogger("emotionflow.gemini")
 
@@ -174,10 +174,13 @@ def analyze_causality(
                 )
                 raw_text = response.text.strip()
                 break  # success
-            except ClientError as e:
+            except (ClientError, ServerError) as e:
                 last_error = e
-                if e.status_code == 429:
-                    logger.warning(f"Rate limited on {try_model} (attempt {attempt + 1}): {e}")
+                http_code = getattr(e, "code", None)
+                # 429 = rate limited, 503 = overloaded — both are transient
+                is_retryable = http_code in (429, 503) or isinstance(e, ServerError)
+                if is_retryable:
+                    logger.warning(f"Transient Gemini error on {try_model} (HTTP {http_code}, attempt {attempt + 1}): {e}")
                     if attempt < MAX_RETRIES - 1:
                         time.sleep(RETRY_DELAY_SECONDS)
                         continue
