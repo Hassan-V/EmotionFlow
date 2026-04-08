@@ -150,9 +150,9 @@ function OverviewSection() {
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-800 text-zinc-300">
-            <tr><td className="px-4 py-2"><Badge color="emerald">fast</Badge></td><td className="px-4 py-2">1 CU</td><td className="px-4 py-2">Whisper tiny + rule-based emotion — fastest turnaround</td></tr>
-            <tr><td className="px-4 py-2"><Badge color="violet">balanced</Badge></td><td className="px-4 py-2">5 CU</td><td className="px-4 py-2">Whisper base + ML emotion classifier — recommended</td></tr>
-            <tr><td className="px-4 py-2"><Badge color="amber">max</Badge></td><td className="px-4 py-2">20 CU</td><td className="px-4 py-2">Whisper large-v3 + full causality analysis</td></tr>
+            <tr><td className="px-4 py-2"><Badge color="emerald">fast</Badge></td><td className="px-4 py-2">1 CU</td><td className="px-4 py-2">Fastest turnaround — basic emotion detection</td></tr>
+            <tr><td className="px-4 py-2"><Badge color="violet">balanced</Badge></td><td className="px-4 py-2">5 CU</td><td className="px-4 py-2">Full emotion analysis with transcript — recommended</td></tr>
+            <tr><td className="px-4 py-2"><Badge color="amber">max</Badge></td><td className="px-4 py-2">20 CU</td><td className="px-4 py-2">Full analysis + AI causality — deepest insight</td></tr>
           </tbody>
         </table>
       </div>

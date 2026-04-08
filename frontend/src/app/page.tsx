@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Zap, Mic, BarChart3, Key, Webhook, Shield } from "lucide-react";
 
 const features = [
-  { icon: Mic, title: "Speech Emotion AI", desc: "Whisper ASR + emotion classification on any audio file up to 50MB" },
-  { icon: BarChart3, title: "Deep Causality", desc: "Max tier uses Gemini to explain what triggered each emotion shift" },
+  { icon: Mic, title: "Speech Emotion AI", desc: "Automatic transcription + emotion classification on any audio file up to 50MB" },
+  { icon: BarChart3, title: "Deep Causality", desc: "Max tier uses AI to explain what triggered each emotion shift" },
   { icon: Key, title: "API-First", desc: "Full REST API with API key auth for integrations and bots" },
   { icon: Webhook, title: "Webhooks", desc: "Real-time notifications with HMAC-signed payloads on job events" },
   { icon: Shield, title: "Metered Billing", desc: "Pay-per-analysis with immutable audit ledger for every request" },
@@ -44,7 +44,7 @@ export default function LandingPage() {
           <Link href="/login" className="border border-zinc-700 hover:bg-zinc-800 text-zinc-300 px-6 py-3 rounded-xl text-sm transition-colors">Sign in</Link>
         </div>
         <div className="mt-20 grid grid-cols-3 gap-4 max-w-2xl w-full">
-          {[{ name: "Fast", price: "1 CU", desc: "Quick sentiment" }, { name: "Balanced", price: "5 CU", desc: "Full analysis" }, { name: "Max", price: "20 CU", desc: "AI causality" }].map((t) => (
+          {[{ name: "Fast", price: "1 CU", desc: "Basic emotion detection" }, { name: "Balanced", price: "5 CU", desc: "Full analysis" }, { name: "Max", price: "20 CU", desc: "AI causality" }].map((t) => (
             <div key={t.name} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-left">
               <p className="text-sm font-medium text-zinc-200">{t.name}</p>
               <p className="text-2xl font-bold text-violet-400 mt-1">{t.price}</p>
