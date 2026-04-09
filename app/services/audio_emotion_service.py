@@ -85,8 +85,9 @@ def _load_audio_segment(
     Load a segment of audio from file.
     Returns 1D float32 numpy array at 16kHz.
     """
-    info = torchaudio.info(audio_path)
-    sr = info.sample_rate
+    import soundfile as sf
+    info = sf.info(audio_path)
+    sr = info.samplerate
 
     frame_start = int(start_sec * sr)
     num_frames = int((end_sec - start_sec) * sr)
