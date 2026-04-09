@@ -22,12 +22,13 @@ logger = logging.getLogger("emotionflow.audio_emotion")
 # ─── Model configuration ────────────────────────────────────────────────────
 
 AUDIO_MODEL_PRIMARY = "superb/wav2vec2-base-superb-er"
+AUDIO_MODEL_XLSR   = "ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition"
 AUDIO_MODEL_HUBERT = "superb/hubert-large-superb-er"
 
 TIER_MODEL_MAP = {
     "fast":     [AUDIO_MODEL_PRIMARY],
-    "balanced": [AUDIO_MODEL_PRIMARY],
-    "max":      [AUDIO_MODEL_PRIMARY, AUDIO_MODEL_HUBERT],
+    "balanced": [AUDIO_MODEL_PRIMARY, AUDIO_MODEL_XLSR],
+    "max":      [AUDIO_MODEL_PRIMARY, AUDIO_MODEL_XLSR, AUDIO_MODEL_HUBERT],
 }
 
 # Label mapping: abbreviated labels → full names

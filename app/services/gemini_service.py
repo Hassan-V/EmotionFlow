@@ -21,6 +21,7 @@ logger = logging.getLogger("emotionflow.gemini")
 
 # Model fallback chain: try best first, fall back on quota/rate errors
 MODEL_CHAIN = [
+    "gemini-2.5-pro",
     "gemini-2.5-flash",
     "gemini-2.0-flash",
 ]

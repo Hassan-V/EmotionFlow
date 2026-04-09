@@ -11,9 +11,9 @@ import whisper
 logger = logging.getLogger("emotionflow.asr")
 
 TIER_MODEL_MAP = {
-    "fast": "tiny",
-    "balanced": "small",
-    "max": "medium",
+    "fast":     "small",
+    "balanced": "medium",
+    "max":      "large-v3",
 }
 
 # Module-level cache: loaded models

@@ -255,6 +255,17 @@ async def worker_loop():
     logger.info(f"Worker started (id={worker_id}). Waiting for jobs...")
     logger.info(f"Gemini API key: {'set' if settings.GEMINI_API_KEY else 'NOT SET'}")
 
+    # Sync models from VPS before processing any jobs
+    try:
+        from app.services.model_sync import sync_all_models
+        sync_all_models(
+            api_base_url=settings.API_BASE_URL,
+            worker_secret=settings.WORKER_SECRET,
+            model_tier=settings.MODEL_TIER,
+        )
+    except Exception as e:
+        logger.warning(f"Model sync failed (will use local/CDN fallback): {e}")
+
     while True:
         try:
             # Heartbeat — mark this worker as alive with a 30s TTL
