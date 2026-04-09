@@ -85,29 +85,15 @@ def _load_audio_segment(
     Load a segment of audio from file.
     Returns 1D float32 numpy array at 16kHz.
     """
-    import soundfile as sf
-    info = sf.info(audio_path)
-    sr = info.samplerate
-
-    frame_start = int(start_sec * sr)
-    num_frames = int((end_sec - start_sec) * sr)
-
-    waveform, file_sr = torchaudio.load(
+    import librosa
+    waveform, _ = librosa.load(
         audio_path,
-        frame_offset=frame_start,
-        num_frames=num_frames,
+        sr=TARGET_SR,
+        offset=start_sec,
+        duration=end_sec - start_sec,
+        mono=True,
     )
-
-    # Mix to mono if stereo
-    if waveform.shape[0] > 1:
-        waveform = waveform.mean(dim=0, keepdim=True)
-
-    # Resample to 16kHz if needed
-    if file_sr != TARGET_SR:
-        resampler = torchaudio.transforms.Resample(file_sr, TARGET_SR)
-        waveform = resampler(waveform)
-
-    return waveform.squeeze(0).numpy().astype(np.float32)
+    return waveform.astype(np.float32)
 
 
 def classify_audio_segment(
