@@ -56,8 +56,19 @@ async def get_telemetry_summary(db: AsyncSession = Depends(get_db)):
         min_id = f"{int((one_hour_ago).timestamp() * 1000)}-0"
         entries = await redis_client.xrange("telemetry:api_logs", min=min_id)
         requests_last_hour = len(entries)
+        latencies = sorted(
+            float(data.get("process_time_ms", 0))
+            for _, data in entries
+            if data.get("process_time_ms") not in (None, "")
+        )
+        avg_api_latency_ms = sum(latencies) / len(latencies) if latencies else 0.0
+        p95_index = min(len(latencies) - 1, max(0, int(len(latencies) * 0.95))) if latencies else 0
+        p95_api_latency_ms = latencies[p95_index] if latencies else 0.0
+        api_errors_last_hour = sum(int(data.get("status_code", 0)) >= 500 for _, data in entries)
     except Exception:
         requests_last_hour = 0
+        avg_api_latency_ms = p95_api_latency_ms = 0.0
+        api_errors_last_hour = 0
 
     error_rate = (error_count / total_requests * 100) if total_requests > 0 else 0.0
 
@@ -72,6 +83,9 @@ async def get_telemetry_summary(db: AsyncSession = Depends(get_db)):
         avg_processing_time_ms=job_stats.avg_time,
         error_rate_percent=round(error_rate, 2),
         requests_last_hour=requests_last_hour,
+        avg_api_latency_ms=round(avg_api_latency_ms, 2),
+        p95_api_latency_ms=round(p95_api_latency_ms, 2),
+        api_errors_last_hour=api_errors_last_hour,
     )
 
 
@@ -208,7 +222,7 @@ async def get_worker_job_stats(
                 "avg_total_ms": round(sum(_f(j.get("total_time_ms")) for j in completed) / n, 1) if n else 0.0,
                 "avg_asr_ms": round(sum(_f(j.get("asr_time_ms")) for j in completed) / n, 1) if n else 0.0,
                 "avg_emotion_ms": round(sum(_f(j.get("emotion_time_ms")) for j in completed) / n, 1) if n else 0.0,
-                "avg_gemini_ms": round(sum(_f(j.get("gemini_time_ms")) for j in completed) / n, 1) if n else 0.0,
+                "avg_local_causality_ms": round(sum(_f(j.get("local_causality_time_ms")) for j in completed) / n, 1) if n else 0.0,
             },
         }
     except Exception as e:
@@ -386,4 +400,3 @@ async def get_worker_status():
     except Exception as e:
         logger.error(f"Failed to read worker status: {e}")
         raise HTTPException(status_code=500, detail="Failed to read worker status")
-

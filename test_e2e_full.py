@@ -4,7 +4,7 @@ Full Stack E2E Test — Tests the complete EmotionFlow pipeline:
   2. Register user → Login → Get JWT
   3. Register webhook endpoint
   4. Upload IEMOCAP audio file → Get job_id
-  5. Worker picks up job → Whisper ASR → Emotion Models → Gemini Causality
+  5. Worker picks up job → Faster-Whisper → multimodal fusion → local causality
   6. Poll until complete → Verify results
   7. Verify webhook was delivered
   8. Check telemetry in Redis
@@ -12,7 +12,7 @@ Full Stack E2E Test — Tests the complete EmotionFlow pipeline:
   10. Verify all DB records
 
 Run with: conda run --no-capture-output -n speech-emotion python -u test_e2e_full.py
-Requires: Docker (postgres + redis), Gemini API key in .env
+Requires: Docker (PostgreSQL + authenticated Redis) and prefetched local models
 """
 import asyncio
 import json
@@ -381,16 +381,16 @@ def main():
                       f"intensity={seg0.get('intensity')}")
                 check("Segment has timestamps", seg0.get("timestamp_end", 0) > seg0.get("timestamp_start", 0))
 
-                # Check for Gemini causality (trigger phrases / causes)
+                # Check for local causality (trigger phrases / causes)
                 has_triggers = sum(1 for s in timeline if s.get("trigger_phrase"))
                 has_causes = sum(1 for s in timeline if s.get("cause"))
-                # For very short audio (<3 segments), Gemini may find no triggers
+                # For very short audio (<3 segments), there may be no transition trigger.
                 if len(timeline) >= 3:
-                    check("Gemini added trigger phrases", has_triggers > 0, f"{has_triggers}/{len(timeline)} segments")
-                    check("Gemini added causal explanations", has_causes > 0, f"{has_causes}/{len(timeline)} segments")
+                    check("Pipeline added trigger phrases", has_triggers > 0, f"{has_triggers}/{len(timeline)} segments")
+                    check("Pipeline added causal explanations", has_causes > 0, f"{has_causes}/{len(timeline)} segments")
                 else:
-                    print(f"  ℹ Gemini causality: {has_triggers}/{len(timeline)} triggers, {has_causes}/{len(timeline)} causes (short audio, acceptable)")
-                    check("Gemini ran (overall_sentiment set)", len(result.get("overall_sentiment", "")) > 0)
+                    print(f"  ℹ Local causality: {has_triggers}/{len(timeline)} triggers, {has_causes}/{len(timeline)} causes (short audio, acceptable)")
+                    check("Overall sentiment set", len(result.get("overall_sentiment", "")) > 0)
 
                 # Emotion distribution from our models
                 emotions = {}
@@ -408,7 +408,7 @@ def main():
                 check("Transcript has content", len(full_text) > 3, f"{len(full_text)} chars")
                 print(f"  ℹ Transcript preview: {full_text[:200]}...")
 
-            # Transitions (from Gemini)
+            # Stabilized transitions
             transitions = result.get("transitions", [])
             if transitions:
                 check("Has emotional transitions", len(transitions) > 0, f"{len(transitions)} transitions")
@@ -581,7 +581,7 @@ def main():
         # ── FINAL SUMMARY ────────────────────────────────────────
         section("ALL CHECKS PASSED ✓")
         print(f"  Audio: {os.path.basename(audio_file)}")
-        print(f"  Pipeline: Whisper (balanced/small) → Emotion (roberta-go_emotions) → Gemini Flash")
+        print("  Pipeline: Faster-Whisper → audio/text emotion → fusion → local Qwen/fallback")
         print(f"  Processing: {final_status.get('processing_time_ms', 0):.0f}ms")
         print(f"  Segments: {len(timeline)} emotional, {len(transcript)} transcript")
         print(f"  Telemetry: {new_entries} API logs, {user_req} user requests tracked")

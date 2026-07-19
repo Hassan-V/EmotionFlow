@@ -5,17 +5,18 @@ services:
       dockerfile: Dockerfile
     container_name: emotionflow-api
     ports:
-      - "8000:8000"
+      - "${TAILSCALE_BIND_IP:-127.0.0.1}:8000:8000"
     environment:
       - DATABASE_URL=postgresql+asyncpg://emotionflow:emotionflow_secret@postgres:5432/emotionflow
       - SYNC_DATABASE_URL=postgresql+psycopg2://emotionflow:emotionflow_secret@postgres:5432/emotionflow
-      - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL=redis://:${REDIS_PASSWORD:?set REDIS_PASSWORD}@redis:6379/0
       - JWT_SECRET_KEY=change-me-in-production-use-openssl-rand-hex-32
       - JWT_ALGORITHM=HS256
       - ACCESS_TOKEN_EXPIRE_MINUTES=30
       - REFRESH_TOKEN_EXPIRE_DAYS=7
       - MAX_UPLOAD_SIZE_MB=50
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - LOCAL_MODELS_ONLY=true
+      - WORKER_SECRET=${WORKER_SECRET:-local-worker-secret}
       - ENVIRONMENT=development
     volumes:
       - ./app:/app/app
@@ -37,10 +38,13 @@ services:
     environment:
       - DATABASE_URL=postgresql+asyncpg://emotionflow:emotionflow_secret@postgres:5432/emotionflow
       - SYNC_DATABASE_URL=postgresql+psycopg2://emotionflow:emotionflow_secret@postgres:5432/emotionflow
-      - REDIS_URL=redis://redis:6379/0
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:?set REDIS_PASSWORD}@redis:6379/0
+      - LOCAL_MODELS_ONLY=true
       - ENVIRONMENT=development
       - MODEL_TIER=balanced
+      - GPU_RESOURCE_ID=${GPU_RESOURCE_ID:-rtx5070}
+      - API_BASE_URL=http://api:8000
+      - WORKER_SECRET=${WORKER_SECRET:-local-worker-secret}
     volumes:
       - ./app:/app/app
       - upload_data:/app/uploads
@@ -48,6 +52,26 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - emotionflow-net
+
+  live-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: emotionflow-live-worker
+    command: ["python", "-m", "app.services.live_worker"]
+    environment:
+      - REDIS_URL=redis://:${REDIS_PASSWORD:?set REDIS_PASSWORD}@redis:6379/0
+      - LOCAL_MODELS_ONLY=true
+      - GPU_RESOURCE_ID=${GPU_RESOURCE_ID:-rtx5070}
+    volumes:
+      - ./app:/app/app
+      - model_cache:/root/.cache
+    depends_on:
       redis:
         condition: service_healthy
     restart: unless-stopped
@@ -62,7 +86,7 @@ services:
       POSTGRES_PASSWORD: emotionflow_secret
       POSTGRES_DB: emotionflow
     ports:
-      - "5433:5432"
+      - "${TAILSCALE_BIND_IP:-127.0.0.1}:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -78,15 +102,17 @@ services:
     image: redis:7-alpine
     container_name: emotionflow-redis
     ports:
-      - "6380:6379"
+      - "${TAILSCALE_BIND_IP:-127.0.0.1}:6380:6379"
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD-SHELL", "redis-cli -a $${REDIS_PASSWORD} ping | grep PONG"]
       interval: 5s
       timeout: 5s
       retries: 5
-    command: redis-server --appendonly yes
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD:?set REDIS_PASSWORD}
+    command: ["sh", "-c", "redis-server --appendonly yes --requirepass \"$$REDIS_PASSWORD\""]
     restart: unless-stopped
     networks:
       - emotionflow-net

@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "message_types": [
+    "error"
+  ],
+  "message_count": 1,
+  "p95_latency_ms": null,
+  "p95_under_five_seconds": false,
+  "final_result": {},
+  "error": {
+    "type": "error",
+    "message": "No live GPU worker is available. Start app.services.live_worker on a Tailscale worker.",
+    "recoverable": true
+  }
+}

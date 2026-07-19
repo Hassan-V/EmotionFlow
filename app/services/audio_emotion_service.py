@@ -11,7 +11,6 @@ import time
 
 import numpy as np
 import torch
-import torchaudio
 from transformers import (
     Pipeline,
     pipeline,
@@ -27,20 +26,21 @@ AUDIO_MODEL_HUBERT = "superb/hubert-large-superb-er"
 
 TIER_MODEL_MAP = {
     "fast":     [AUDIO_MODEL_PRIMARY],
-    "balanced": [AUDIO_MODEL_PRIMARY, AUDIO_MODEL_XLSR],
-    "max":      [AUDIO_MODEL_PRIMARY, AUDIO_MODEL_XLSR, AUDIO_MODEL_HUBERT],
+    "balanced": [AUDIO_MODEL_PRIMARY],
+    "max":      [AUDIO_MODEL_PRIMARY],
 }
 
 # Label mapping: abbreviated labels → full names
 LABEL_NORMALIZE = {
     "ang": "angry",
-    "hap": "happy",
+    "hap": "joy",
     "neu": "neutral",
-    "sad": "sad",
+    "sad": "sadness",
     # full labels (in case model config differs)
     "angry": "angry",
-    "happy": "happy",
+    "happy": "joy",
     "neutral": "neutral",
+    "sadness": "sadness",
 }
 
 TARGET_SR = 16000
@@ -67,6 +67,7 @@ def load_audio_classifier(model_name: str) -> Pipeline:
         "audio-classification",
         model=model_name,
         device=device,
+        local_files_only=True,
     )
 
     elapsed = time.perf_counter() - t0

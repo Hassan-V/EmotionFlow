@@ -152,6 +152,32 @@ Submit an audio file for asynchronous analysis.
 
 ---
 
+### `POST /analysis/analyze-stream`
+
+Stream a raw audio request body without multipart encoding. HTTP chunked transfer
+is accepted and the completed body is queued through the same local analysis
+engine and JSON result contract as `analyze-file`.
+
+**Auth**: JWT Bearer or `X-API-Key`
+
+**Query**:
+- `filename` (default `stream.wav`) - must end in an allowed audio extension
+- `model_tier` (default `fast`) - `fast` | `balanced` | `max`
+- `session_id` (optional)
+
+**Body**: raw WAV, MP3, M4A, FLAC, OGG, or WebM bytes
+
+```bash
+curl -X POST "$BASE_URL/analysis/analyze-stream?filename=meeting.wav&model_tier=fast" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: audio/wav" \
+  --data-binary @meeting.wav
+```
+
+**Response**: `202 Accepted` with the same `JobSubmitResponse` as `analyze-file`.
+
+---
+
 ### `GET /analysis/jobs/{job_id}`
 
 Retrieve the status and result of a submitted job.
@@ -368,17 +394,20 @@ Per-user and per-tier cost breakdown for the current month.
 
 ## WebSocket Streaming
 
-### `WS /streaming/jobs/{job_id}`
+### `WS /ws/stream?token={access_token}`
 
-Subscribe to live status updates for a job. The server sends JSON messages as the job
-progresses through stages.
+Send a `config` JSON message first, followed by ordered binary PCM16 frames, and finish with
+`end_stream`.
 
 **Message format**:
 ```json
-{"event": "status_update", "status": "processing", "stage": "asr"}
-{"event": "completed", "result": { ... }}
-{"event": "failed", "error": "..."}
+{"type":"config","tier":"fast","session_id":"demo","encoding":"pcm_s16le","sample_rate":16000,"chunk_ms":250}
+<binary 16 kHz mono PCM16 frame>
+{"type":"end_stream"}
 ```
+
+Server message types are `connected`, `status`, `transcript`, `emotion`, `causality`,
+`final_result`, and `error`. Recoverable errors include worker loss and inactivity expiry.
 
 ---
 

@@ -68,20 +68,55 @@ api.interceptors.request.use((config) => {
 
 let _refreshing: Promise<void> | null = null;
 
+function tokenExpiresSoon(token: string, leadTimeMs = 60_000): boolean {
+  try {
+    const encoded = token.split(".")[1];
+    if (!encoded) return true;
+    const normalized = encoded.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+    const payload = JSON.parse(window.atob(padded)) as { exp?: number };
+    return !payload.exp || payload.exp * 1000 <= Date.now() + leadTimeMs;
+  } catch {
+    return true;
+  }
+}
+
+async function refreshTokens(): Promise<void> {
+  if (!_refresh) throw new Error("No refresh token is available");
+  if (!_refreshing) {
+    _refreshing = api
+      .post<TokenResponse>("/auth/refresh", { refresh_token: _refresh })
+      .then((r) => setTokens(r.data.access_token, r.data.refresh_token))
+      .catch((error) => {
+        clearTokens();
+        throw error;
+      })
+      .finally(() => (_refreshing = null));
+  }
+  await _refreshing;
+}
+
+export async function ensureFreshAccessToken(fallbackToken?: string): Promise<string | null> {
+  loadTokensFromStorage();
+  if (!_access && fallbackToken) _access = fallbackToken;
+  if (!_access) return null;
+  if (!tokenExpiresSoon(_access)) return _access;
+  try {
+    await refreshTokens();
+    return _access;
+  } catch {
+    return null;
+  }
+}
+
 api.interceptors.response.use(
   (r) => r,
   async (error) => {
     const original = error.config;
-    if (error.response?.status === 401 && !original._retry && _refresh) {
+    const isRefreshRequest = typeof original?.url === "string" && original.url.includes("/auth/refresh");
+    if (error.response?.status === 401 && !isRefreshRequest && !original._retry && _refresh) {
       original._retry = true;
-      if (!_refreshing) {
-        _refreshing = api
-          .post<TokenResponse>("/auth/refresh", { refresh_token: _refresh })
-          .then((r) => setTokens(r.data.access_token, r.data.refresh_token))
-          .catch(() => clearTokens())
-          .finally(() => (_refreshing = null));
-      }
-      await _refreshing;
+      await refreshTokens();
       if (_access) {
         original.headers["Authorization"] = `Bearer ${_access}`;
         return api(original);

@@ -2,8 +2,8 @@
 AI Worker Process — Runs separately from the API.
 Pulls jobs from Redis queue, processes audio files through the real AI pipeline:
   1. ASR → transcript with timestamps
-  2. Emotion classification → per-segment emotion labels + intensities
-  3. Gemini causality → trigger phrases, causal explanations, transitions
+  2. Text + audio emotion classification, acoustic analysis and local fusion
+  3. Local topic/shift detection + Qwen causal explanations
   4. Session memory → persist context for multi-turn analysis
 
 Writes structured results back to PostgreSQL.
@@ -67,21 +67,20 @@ def process_audio_file(
     model_tier: str,
     user_id: int = 0,
     session_id: str = "",
-    gemini_api_key: str = "",
     redis_client: redis.Redis = None,
 ) -> dict:
     """
     Real AI pipeline:
       1. Whisper ASR → transcript segments
-      2. Audio-based Speech Emotion Recognition → per-segment labels from waveform
-      3. Gemini causality → trigger phrases + causal reasoning
+      2. Text + audio emotion recognition → canonical fused labels
+      3. Local topic/shift evidence → grounded local causal reasoning
       4. Session memory → persist context
 
     Returns structured AnalysisResult dict.
     """
-    from app.services.asr_service import transcribe, unload_model
-    from app.services.audio_emotion_service import classify_segments_audio, unload_audio_classifiers
-    from app.services.gemini_service import analyze_causality, build_session_summary
+    from app.services.asr_service import transcribe
+    from app.services.multimodal_service import analyze_multimodal_segments
+    from app.services.local_causality_service import MODEL_NAME, build_session_summary, build_summary
     from app.services import session_service
 
     logger.info(f"Processing {file_path} with tier={model_tier}")
@@ -91,71 +90,53 @@ def process_audio_file(
     _t0 = time.perf_counter()
     asr_result = transcribe(file_path, tier=model_tier)
     asr_time_ms = (time.perf_counter() - _t0) * 1000
-    segments = asr_result["segments"]
+    transcript_segments = asr_result["segments"]
+    segments = transcript_segments
     duration = asr_result["duration_seconds"]
+    if not segments and duration > 0:
+        # Preserve audio-only emotion analysis when no text can be transcribed.
+        segments = [{"start": 0.0, "end": duration, "text": ""}]
     logger.info(f"ASR done: {len(segments)} segments, {duration:.1f}s audio, lang={asr_result['language']}, took {asr_time_ms:.0f}ms")
 
-    # Free Whisper VRAM before loading emotion model
-    unload_model(model_tier)
-
-    # ── Step 2: Audio-based Emotion Classification ────────────────
-    logger.info("Step 2/3: Running audio-based SER...")
+    # ── Step 2: Unified multimodal analysis ───────────────────────
+    logger.info("Step 2/3: Running text + audio fusion, topics and local causality...")
     _t0 = time.perf_counter()
-    classified = classify_segments_audio(segments, file_path, tier=model_tier)
+    multimodal = analyze_multimodal_segments(segments, file_path, tier=model_tier)
+    classified = multimodal["segments"]
     emotion_time_ms = (time.perf_counter() - _t0) * 1000
-    logger.info(f"Audio SER done: {len(classified)} segments classified, took {emotion_time_ms:.0f}ms")
-
-    # Free emotion model VRAM before Gemini (Gemini is API, but good practice)
-    unload_audio_classifiers()
-
-    # ── Step 3: Gemini Causality ─────────────────────────────────
-    session_context = None
-    if redis_client and session_id:
-        session_context = session_service.get_session_context(
-            redis_client, user_id, session_id
-        )
-        if session_context:
-            logger.info(f"Loaded session context for session={session_id}")
-
-    causality = {"overall_sentiment": "unknown", "summary": "", "segments": [], "transitions": []}
-    gemini_time_ms = 0.0
-    if gemini_api_key:
-        logger.info("Step 3/3: Running Gemini causal analysis...")
-        _t0 = time.perf_counter()
-        causality = analyze_causality(
-            classified, gemini_api_key, session_context=session_context
-        )
-        gemini_time_ms = (time.perf_counter() - _t0) * 1000
-        logger.info(f"Gemini done: sentiment={causality['overall_sentiment']}, took {gemini_time_ms:.0f}ms")
-    else:
-        logger.warning("No Gemini API key — skipping causal analysis")
+    logger.info(f"Multimodal analysis done: {len(classified)} segments, took {emotion_time_ms:.0f}ms")
+    _summary_started = time.perf_counter()
+    final_summary = build_summary(classified, multimodal["transitions"], use_model=True)
+    local_causality_time_ms = (
+        multimodal.get("stage_timings", {}).get("local_causality_time_ms", 0)
+        + (time.perf_counter() - _summary_started) * 1000
+    )
+    multimodal["summary"] = final_summary
 
     # ── Step 4: Session Memory ───────────────────────────────────
-    if redis_client and session_id and gemini_api_key:
-        summary = build_session_summary(classified, causality)
+    if redis_client and session_id:
+        summary = build_session_summary(classified, multimodal)
         session_service.append_to_session(
             redis_client, user_id, session_id, summary,
             metadata={"filename": os.path.basename(file_path)},
         )
 
     # ── Build final result ───────────────────────────────────────
-    # Merge emotion classification with Gemini causality
+    # Preserve the established timeline fields and add auditable provenance.
     timeline = []
-    causality_segments = {s.get("index", i): s for i, s in enumerate(causality.get("segments", []))}
-
-    for i, seg in enumerate(classified):
-        cseg = causality_segments.get(i, {})
-        # Gemini might adjust emotion/intensity
-        emotion = cseg.get("adjusted_emotion") or seg["emotion"]
-        intensity = cseg.get("adjusted_intensity") if cseg.get("adjusted_intensity") is not None else seg["intensity"]
-
+    for seg in classified:
         timeline.append({
             "timestamp_start": seg["start"],
             "timestamp_end": seg["end"],
-            "emotion": emotion,
-            "intensity": round(float(intensity), 4),
-            "trigger_phrase": cseg.get("trigger_phrase"),
-            "cause": cseg.get("cause"),
+            "text": seg["text"],
+            "emotion": seg["emotion"],
+            "intensity": round(float(seg["intensity"]), 4),
+            "trigger_phrase": seg.get("trigger_phrase"),
+            "cause": seg.get("cause"),
+            "cause_source": seg.get("cause_source"),
+            "modalities": seg.get("modalities", {}),
+            "topic": seg.get("topic", {}),
+            "acoustic": seg.get("acoustic", {}),
         })
 
     transcript = [
@@ -165,23 +146,31 @@ def process_audio_file(
             "text": seg["text"],
             "speaker": "Speaker 1",  # TODO: diarization in future
         }
-        for seg in segments
+        for seg in transcript_segments
     ]
 
     return {
         "filename": os.path.basename(file_path),
         "duration_seconds": duration,
-        "overall_sentiment": causality.get("overall_sentiment", "unknown"),
+        "overall_sentiment": multimodal["overall_sentiment"],
         "model_tier": model_tier,
         "language": asr_result.get("language", "en"),
-        "summary": causality.get("summary", ""),
+        "summary": final_summary,
         "timeline": timeline,
         "transcript": transcript,
-        "transitions": causality.get("transitions", []),
+        "transitions": multimodal["transitions"],
+        "model_provenance": {
+            "asr": asr_result.get("model"),
+            "audio_emotion": "superb/wav2vec2-base-superb-er",
+            "text_emotion": "j-hartmann/emotion-english-distilroberta-base",
+            "fusion": "weighted-audio-0.55-text-0.45",
+            "causality": f"{MODEL_NAME} with deterministic fallback",
+            "external_inference": False,
+        },
         "stage_timings": {
             "asr_time_ms": round(asr_time_ms, 1),
             "emotion_time_ms": round(emotion_time_ms, 1),
-            "gemini_time_ms": round(gemini_time_ms, 1),
+            "local_causality_time_ms": round(local_causality_time_ms, 1),
         },
     }
 
@@ -251,32 +240,37 @@ async def worker_loop():
     worker_id = f"{socket.gethostname()}-{os.getpid()}"
     HEARTBEAT_KEY = f"worker:heartbeat:{worker_id}"
     HEARTBEAT_TTL = 30  # seconds — if no heartbeat for 30s, considered dead
+    gpu_resource = os.getenv("GPU_RESOURCE_ID", "default-gpu")
+    live_priority_key = f"gpu:{gpu_resource}:live-priority"
 
-    logger.info(f"Worker started (id={worker_id}). Waiting for jobs...")
-    logger.info(f"Gemini API key: {'set' if settings.GEMINI_API_KEY else 'NOT SET'}")
-
-    # Sync models from VPS before processing any jobs
+    logger.info(f"Worker started (id={worker_id}). Warming local causal model before accepting jobs...")
     try:
-        from app.services.model_sync import sync_all_models
-        sync_all_models(
-            api_base_url=settings.API_BASE_URL,
-            worker_secret=settings.WORKER_SECRET,
-            model_tier=settings.MODEL_TIER,
-        )
-    except Exception as e:
-        logger.warning(f"Model sync failed (will use local/CDN fallback): {e}")
+        from app.services.local_causality_service import MODEL_NAME, _load_qwen
+        await asyncio.to_thread(_load_qwen)
+        logger.info("Causality engine ready: %s (no external inference)", MODEL_NAME)
+    except Exception as exc:
+        logger.warning("Local causal model warmup failed; grounded fallback remains available: %s", exc)
+    logger.info("Waiting for jobs...")
 
     while True:
         try:
             # Heartbeat — mark this worker as alive with a 30s TTL
             await async_redis.setex(HEARTBEAT_KEY, HEARTBEAT_TTL, int(time.time()))
 
-            # Blocking pop with 5s timeout
-            result = await async_redis.brpop("analysis:jobs", timeout=5)
+            if await async_redis.exists(live_priority_key):
+                await asyncio.sleep(0.25)
+                continue
+
+            # Stay below common five-second network read timeouts on remote Redis links.
+            result = await async_redis.brpop("analysis:jobs", timeout=2)
             if not result:
                 continue
 
             _, payload_str = result
+            if await async_redis.exists(live_priority_key):
+                await async_redis.rpush("analysis:jobs", payload_str)
+                await asyncio.sleep(0.25)
+                continue
             payload = json.loads(payload_str)
 
             job_id = payload["job_id"]
@@ -326,7 +320,6 @@ async def worker_loop():
                     model_tier=model_tier,
                     user_id=user_id,
                     session_id=session_id,
-                    gemini_api_key=settings.GEMINI_API_KEY,
                     redis_client=sync_redis,
                 )
                 processing_time_ms = (time.perf_counter() - start_time) * 1000
@@ -373,7 +366,7 @@ async def worker_loop():
                             "total_time_ms": str(round(processing_time_ms, 1)),
                             "asr_time_ms": str(stage_timings.get("asr_time_ms", 0)),
                             "emotion_time_ms": str(stage_timings.get("emotion_time_ms", 0)),
-                            "gemini_time_ms": str(stage_timings.get("gemini_time_ms", 0)),
+                            "local_causality_time_ms": str(stage_timings.get("local_causality_time_ms", 0)),
                             "segment_count": str(len(result_data.get("timeline", []))),
                             "audio_duration_s": str(round(result_data.get("duration_seconds", 0), 2)),
                             "overall_sentiment": result_data.get("overall_sentiment", ""),

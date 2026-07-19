@@ -1,0 +1,17 @@
+{
+  "addOns": {
+    "common": {
+      "name": "EmotionFlow",
+      "logoUrl": "https://emotionflow.site/emotionflow-meet-logo-light.png"
+    },
+    "meet": {
+      "web": {
+        "sidePanelUrl": "https://emotionflow.site/meet/side-panel",
+        "supportsScreenSharing": false,
+        "addOnOrigins": ["https://emotionflow.site"],
+        "logoUrl": "https://emotionflow.site/emotionflow-meet-logo-light.png",
+        "darkModeLogoUrl": "https://emotionflow.site/emotionflow-meet-logo.png"
+      }
+    }
+  }
+}

@@ -1,0 +1,1253 @@
+{
+  "passed": true,
+  "elapsed_ms": 23083.8,
+  "message_types": [
+    "causality",
+    "connected",
+    "emotion",
+    "final_result",
+    "status",
+    "transcript"
+  ],
+  "message_count": 35,
+  "latency_samples_ms": [
+    6988.0,
+    6988.0,
+    5965.0,
+    5965.0,
+    5965.0,
+    5965.0,
+    6307.0,
+    6307.0,
+    6307.0,
+    6307.0,
+    6601.0,
+    6601.0,
+    6996.0,
+    6996.0,
+    6996.0,
+    6996.0,
+    4433.0,
+    4433.0,
+    4805.0,
+    4805.0,
+    4805.0,
+    4805.0,
+    4805.0,
+    4805.0,
+    5168.0,
+    5168.0,
+    5168.0,
+    5168.0,
+    5168.0,
+    3913.0,
+    3913.0
+  ],
+  "p95_latency_ms": 6996.0,
+  "p95_under_five_seconds": false,
+  "final_result": {
+    "filename": "live-session.pcm",
+    "duration_seconds": 21.39,
+    "overall_sentiment": "neutral",
+    "summary": "The conversation is predominantly neutral. 1 stabilized emotion shift was detected from fused vocal and textual evidence.",
+    "timeline": [
+      {
+        "timestamp_start": 0.0,
+        "timestamp_end": 2.88,
+        "start": 0.0,
+        "end": 2.88,
+        "text": "I called to ask about the status of my order.",
+        "emotion": "neutral",
+        "intensity": 0.4853,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.8668,
+            "scores": {
+              "anger": 0.0214,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.1111,
+              "neutral": 0.8668,
+              "sadness": 0.0007,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "fear",
+            "confidence": 0.4395,
+            "scores": {
+              "anger": 0.3827,
+              "disgust": 0.0047,
+              "fear": 0.4395,
+              "joy": 0.0287,
+              "neutral": 0.0191,
+              "sadness": 0.1148,
+              "surprise": 0.0105
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.4853,
+            "scores": {
+              "anger": 0.184,
+              "disgust": 0.0021,
+              "fear": 0.1978,
+              "joy": 0.074,
+              "neutral": 0.4853,
+              "sadness": 0.052,
+              "surprise": 0.0047
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "status order / status",
+          "keywords": [
+            "status order",
+            "status",
+            "order"
+          ],
+          "similarity_to_previous": 1.0,
+          "is_shift": false
+        },
+        "acoustic": {
+          "pitch_hz": 983.2,
+          "rms_db": -18.77,
+          "speech_rate_wps": 3.47,
+          "duration_seconds": 2.88,
+          "energy_delta_db": null,
+          "pitch_delta_hz": null,
+          "speech_rate_delta_wps": null
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 2.5,
+        "timestamp_end": 3.5,
+        "start": 2.5,
+        "end": 3.5,
+        "text": "order.",
+        "emotion": "neutral",
+        "intensity": 0.8129,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.9035,
+            "scores": {
+              "anger": 0.0012,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.0953,
+              "neutral": 0.9035,
+              "sadness": 0.0,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "neutral",
+            "confidence": 0.7022,
+            "scores": {
+              "anger": 0.0759,
+              "disgust": 0.034,
+              "fear": 0.0142,
+              "joy": 0.0029,
+              "neutral": 0.7022,
+              "sadness": 0.1296,
+              "surprise": 0.0412
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.8129,
+            "scores": {
+              "anger": 0.0348,
+              "disgust": 0.0153,
+              "fear": 0.0064,
+              "joy": 0.0537,
+              "neutral": 0.8129,
+              "sadness": 0.0583,
+              "surprise": 0.0185
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "order",
+          "keywords": [
+            "order"
+          ],
+          "similarity_to_previous": 0.2965,
+          "is_shift": false
+        },
+        "acoustic": {
+          "pitch_hz": 1197.3,
+          "rms_db": -31.02,
+          "speech_rate_wps": 1.0,
+          "duration_seconds": 1.0,
+          "energy_delta_db": -12.25,
+          "pitch_delta_hz": 214.1,
+          "speech_rate_delta_wps": -2.47
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 3.5,
+        "timestamp_end": 5.5,
+        "start": 3.5,
+        "end": 5.5,
+        "text": "Everything seemed normal at first.",
+        "emotion": "neutral",
+        "intensity": 0.6441,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.9368,
+            "scores": {
+              "anger": 0.0004,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.062694,
+              "neutral": 0.936706,
+              "sadness": 0.0002,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "joy",
+            "confidence": 0.3109,
+            "scores": {
+              "anger": 0.0207,
+              "disgust": 0.0889,
+              "fear": 0.2602,
+              "joy": 0.3109,
+              "neutral": 0.2864,
+              "sadness": 0.0142,
+              "surprise": 0.0187
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.6441,
+            "scores": {
+              "anger": 0.0095,
+              "disgust": 0.04,
+              "fear": 0.1171,
+              "joy": 0.1744,
+              "neutral": 0.6441,
+              "sadness": 0.0065,
+              "surprise": 0.0084
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "normal",
+          "keywords": [
+            "normal"
+          ],
+          "similarity_to_previous": 0.0,
+          "is_shift": true
+        },
+        "acoustic": {
+          "pitch_hz": 1007.7,
+          "rms_db": -18.48,
+          "speech_rate_wps": 2.5,
+          "duration_seconds": 2.0,
+          "energy_delta_db": 12.54,
+          "pitch_delta_hz": -189.6,
+          "speech_rate_delta_wps": 1.5
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 5.0,
+        "timestamp_end": 6.8,
+        "start": 5.0,
+        "end": 6.8,
+        "text": "at first.",
+        "emotion": "neutral",
+        "intensity": 0.5238,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.9348,
+            "scores": {
+              "anger": 0.0034,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.0618,
+              "neutral": 0.9348,
+              "sadness": 0.0,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "fear",
+            "confidence": 0.9011,
+            "scores": {
+              "anger": 0.022798,
+              "disgust": 0.006099,
+              "fear": 0.90101,
+              "joy": 0.0025,
+              "neutral": 0.021498,
+              "sadness": 0.007799,
+              "surprise": 0.038296
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.5238,
+            "scores": {
+              "anger": 0.0121,
+              "disgust": 0.0027,
+              "fear": 0.4055,
+              "joy": 0.0351,
+              "neutral": 0.5238,
+              "sadness": 0.0035,
+              "surprise": 0.0172
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "general conversation",
+          "keywords": [],
+          "similarity_to_previous": 0.0,
+          "is_shift": false
+        },
+        "acoustic": {
+          "pitch_hz": 1437.0,
+          "rms_db": -23.6,
+          "speech_rate_wps": 1.11,
+          "duration_seconds": 1.8,
+          "energy_delta_db": -5.12,
+          "pitch_delta_hz": 429.3,
+          "speech_rate_delta_wps": -1.39
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 6.8,
+        "timestamp_end": 7.96,
+        "start": 6.8,
+        "end": 7.96,
+        "text": "The delivery is now 2.",
+        "emotion": "neutral",
+        "intensity": 0.7335,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.8586,
+            "scores": {
+              "anger": 0.0645,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.072,
+              "neutral": 0.8586,
+              "sadness": 0.0049,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "neutral",
+            "confidence": 0.5807,
+            "scores": {
+              "anger": 0.0048,
+              "disgust": 0.0017,
+              "fear": 0.0017,
+              "joy": 0.0572,
+              "neutral": 0.5807,
+              "sadness": 0.0157,
+              "surprise": 0.3382
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.7335,
+            "scores": {
+              "anger": 0.0376,
+              "disgust": 0.0008,
+              "fear": 0.0008,
+              "joy": 0.0653,
+              "neutral": 0.7335,
+              "sadness": 0.0098,
+              "surprise": 0.1522
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "delivery",
+          "keywords": [
+            "delivery"
+          ],
+          "similarity_to_previous": 0.0,
+          "is_shift": true
+        },
+        "acoustic": {
+          "pitch_hz": 930.2,
+          "rms_db": -19.43,
+          "speech_rate_wps": 4.31,
+          "duration_seconds": 1.16,
+          "energy_delta_db": 4.17,
+          "pitch_delta_hz": -506.8,
+          "speech_rate_delta_wps": 3.2
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 7.5,
+        "timestamp_end": 10.46,
+        "start": 7.5,
+        "end": 10.46,
+        "text": "now two weeks late and nobody has explained the delay.",
+        "emotion": "neutral",
+        "intensity": 0.5274,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.8099,
+            "scores": {
+              "anger": 0.046595,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.135286,
+              "neutral": 0.809819,
+              "sadness": 0.008299,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "surprise",
+            "confidence": 0.4212,
+            "scores": {
+              "anger": 0.021902,
+              "disgust": 0.007801,
+              "fear": 0.010201,
+              "joy": 0.0043,
+              "neutral": 0.182118,
+              "sadness": 0.352435,
+              "surprise": 0.421242
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.5274,
+            "scores": {
+              "anger": 0.0355,
+              "disgust": 0.0035,
+              "fear": 0.0046,
+              "joy": 0.0763,
+              "neutral": 0.5274,
+              "sadness": 0.1632,
+              "surprise": 0.1896
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "weeks late / weeks",
+          "keywords": [
+            "weeks late",
+            "weeks",
+            "late explained"
+          ],
+          "similarity_to_previous": 0.0,
+          "is_shift": true
+        },
+        "acoustic": {
+          "pitch_hz": 896.9,
+          "rms_db": -19.59,
+          "speech_rate_wps": 3.38,
+          "duration_seconds": 2.96,
+          "energy_delta_db": -0.16,
+          "pitch_delta_hz": -33.3,
+          "speech_rate_delta_wps": -0.93
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 10.0,
+        "timestamp_end": 11.6,
+        "start": 10.0,
+        "end": 11.6,
+        "text": "delay.",
+        "emotion": "neutral",
+        "intensity": 0.8611,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.8445,
+            "scores": {
+              "anger": 0.001,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.154385,
+              "neutral": 0.844416,
+              "sadness": 0.0002,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "neutral",
+            "confidence": 0.8816,
+            "scores": {
+              "anger": 0.0164,
+              "disgust": 0.0138,
+              "fear": 0.0077,
+              "joy": 0.0017,
+              "neutral": 0.8816,
+              "sadness": 0.0538,
+              "surprise": 0.025
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.8611,
+            "scores": {
+              "anger": 0.0079,
+              "disgust": 0.0062,
+              "fear": 0.0035,
+              "joy": 0.0857,
+              "neutral": 0.8611,
+              "sadness": 0.0243,
+              "surprise": 0.0112
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "delay",
+          "keywords": [
+            "delay"
+          ],
+          "similarity_to_previous": 0.3237,
+          "is_shift": false
+        },
+        "acoustic": {
+          "pitch_hz": 970.0,
+          "rms_db": -23.16,
+          "speech_rate_wps": 0.63,
+          "duration_seconds": 1.6,
+          "energy_delta_db": -3.57,
+          "pitch_delta_hz": 73.1,
+          "speech_rate_delta_wps": -2.75
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 11.6,
+        "timestamp_end": 12.84,
+        "start": 11.6,
+        "end": 12.84,
+        "text": "This is not acceptable.",
+        "emotion": "neutral",
+        "intensity": 0.5403,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.9147,
+            "scores": {
+              "anger": 0.0035,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.081708,
+              "neutral": 0.914791,
+              "sadness": 0.0,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "disgust",
+            "confidence": 0.4346,
+            "scores": {
+              "anger": 0.374437,
+              "disgust": 0.434643,
+              "fear": 0.016602,
+              "joy": 0.0019,
+              "neutral": 0.082508,
+              "sadness": 0.087309,
+              "surprise": 0.0026
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.5403,
+            "scores": {
+              "anger": 0.1704,
+              "disgust": 0.1956,
+              "fear": 0.0075,
+              "joy": 0.0458,
+              "neutral": 0.5403,
+              "sadness": 0.0393,
+              "surprise": 0.0012
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "acceptable",
+          "keywords": [
+            "acceptable"
+          ],
+          "similarity_to_previous": 0.0,
+          "is_shift": true
+        },
+        "acoustic": {
+          "pitch_hz": 779.6,
+          "rms_db": -19.03,
+          "speech_rate_wps": 3.23,
+          "duration_seconds": 1.24,
+          "energy_delta_db": 4.13,
+          "pitch_delta_hz": -190.4,
+          "speech_rate_delta_wps": 2.6
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 12.5,
+        "timestamp_end": 15.5,
+        "start": 12.5,
+        "end": 15.5,
+        "text": "I need to speak to your manager.",
+        "emotion": "neutral",
+        "intensity": 0.6749,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.8055,
+            "scores": {
+              "anger": 0.1303,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.0627,
+              "neutral": 0.8055,
+              "sadness": 0.0015,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "neutral",
+            "confidence": 0.5152,
+            "scores": {
+              "anger": 0.0728,
+              "disgust": 0.0838,
+              "fear": 0.1192,
+              "joy": 0.0043,
+              "neutral": 0.5152,
+              "sadness": 0.1909,
+              "surprise": 0.0138
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.6749,
+            "scores": {
+              "anger": 0.1044,
+              "disgust": 0.0377,
+              "fear": 0.0536,
+              "joy": 0.0364,
+              "neutral": 0.6749,
+              "sadness": 0.0867,
+              "surprise": 0.0062
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "speak manager / speak",
+          "keywords": [
+            "speak manager",
+            "speak",
+            "need speak"
+          ],
+          "similarity_to_previous": 0.0,
+          "is_shift": true
+        },
+        "acoustic": {
+          "pitch_hz": 1399.7,
+          "rms_db": -21.54,
+          "speech_rate_wps": 2.33,
+          "duration_seconds": 3.0,
+          "energy_delta_db": -2.51,
+          "pitch_delta_hz": 620.1,
+          "speech_rate_delta_wps": -0.9
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 15.0,
+        "timestamp_end": 17.0,
+        "start": 15.0,
+        "end": 17.0,
+        "text": "manager today.",
+        "emotion": "neutral",
+        "intensity": 0.469,
+        "modalities": {
+          "audio": {
+            "emotion": "joy",
+            "confidence": 0.7223,
+            "scores": {
+              "anger": 0.0043,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.7223,
+              "neutral": 0.2733,
+              "sadness": 0.0001,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "neutral",
+            "confidence": 0.7082,
+            "scores": {
+              "anger": 0.0084,
+              "disgust": 0.0032,
+              "fear": 0.0047,
+              "joy": 0.0054,
+              "neutral": 0.7082,
+              "sadness": 0.0409,
+              "surprise": 0.2292
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.469,
+            "scores": {
+              "anger": 0.0061,
+              "disgust": 0.0014,
+              "fear": 0.0021,
+              "joy": 0.3997,
+              "neutral": 0.469,
+              "sadness": 0.0185,
+              "surprise": 0.1031
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "today / manager today",
+          "keywords": [
+            "today",
+            "manager today",
+            "manager"
+          ],
+          "similarity_to_previous": 0.2048,
+          "is_shift": false
+        },
+        "acoustic": {
+          "pitch_hz": 1663.3,
+          "rms_db": -22.55,
+          "speech_rate_wps": 1.0,
+          "duration_seconds": 2.0,
+          "energy_delta_db": -1.01,
+          "pitch_delta_hz": 263.6,
+          "speech_rate_delta_wps": -1.33
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 17.0,
+        "timestamp_end": 18.0,
+        "start": 17.0,
+        "end": 18.0,
+        "text": "Thank you for fixing",
+        "emotion": "neutral",
+        "intensity": 0.7678,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.907,
+            "scores": {
+              "anger": 0.0008,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.092,
+              "neutral": 0.907,
+              "sadness": 0.0002,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "neutral",
+            "confidence": 0.5976,
+            "scores": {
+              "anger": 0.0181,
+              "disgust": 0.005,
+              "fear": 0.0028,
+              "joy": 0.2493,
+              "neutral": 0.5976,
+              "sadness": 0.0153,
+              "surprise": 0.1119
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.7678,
+            "scores": {
+              "anger": 0.0086,
+              "disgust": 0.0023,
+              "fear": 0.0013,
+              "joy": 0.1628,
+              "neutral": 0.7678,
+              "sadness": 0.007,
+              "surprise": 0.0504
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "thank fixing / thank",
+          "keywords": [
+            "thank fixing",
+            "thank",
+            "fixing"
+          ],
+          "similarity_to_previous": 0.0,
+          "is_shift": true
+        },
+        "acoustic": {
+          "pitch_hz": 1292.5,
+          "rms_db": -19.47,
+          "speech_rate_wps": 4.0,
+          "duration_seconds": 1.0,
+          "energy_delta_db": 3.08,
+          "pitch_delta_hz": -370.8,
+          "speech_rate_delta_wps": 3.0
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 18.0,
+        "timestamp_end": 19.0,
+        "start": 18.0,
+        "end": 19.0,
+        "text": "//",
+        "emotion": "neutral",
+        "intensity": 0.403,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.0,
+            "scores": {}
+          },
+          "text": {
+            "emotion": "neutral",
+            "confidence": 0.4029,
+            "scores": {
+              "anger": 0.211442,
+              "disgust": 0.134727,
+              "fear": 0.106321,
+              "joy": 0.011802,
+              "neutral": 0.402981,
+              "sadness": 0.108322,
+              "surprise": 0.024405
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.403,
+            "scores": {
+              "anger": 0.2114,
+              "disgust": 0.1347,
+              "fear": 0.1063,
+              "joy": 0.0118,
+              "neutral": 0.403,
+              "sadness": 0.1083,
+              "surprise": 0.0244
+            },
+            "audio_weight": 0.0,
+            "text_weight": 1.0
+          }
+        },
+        "topic": {
+          "label": "general conversation",
+          "keywords": [],
+          "similarity_to_previous": 0.0,
+          "is_shift": false
+        },
+        "acoustic": {
+          "pitch_hz": null,
+          "rms_db": -80.0,
+          "speech_rate_wps": 0.0,
+          "duration_seconds": 1.0,
+          "energy_delta_db": -60.53,
+          "pitch_delta_hz": null,
+          "speech_rate_delta_wps": -4.0
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 17.5,
+        "timestamp_end": 19.22,
+        "start": 17.5,
+        "end": 19.22,
+        "text": "fixing it.",
+        "emotion": "neutral",
+        "intensity": 0.7737,
+        "modalities": {
+          "audio": {
+            "emotion": "neutral",
+            "confidence": 0.9848,
+            "scores": {
+              "anger": 0.0003,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.0149,
+              "neutral": 0.9848,
+              "sadness": 0.0,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "neutral",
+            "confidence": 0.5156,
+            "scores": {
+              "anger": 0.141,
+              "disgust": 0.1246,
+              "fear": 0.0093,
+              "joy": 0.0059,
+              "neutral": 0.5156,
+              "sadness": 0.1739,
+              "surprise": 0.0297
+            }
+          },
+          "fused": {
+            "emotion": "neutral",
+            "confidence": 0.7737,
+            "scores": {
+              "anger": 0.0636,
+              "disgust": 0.0561,
+              "fear": 0.0042,
+              "joy": 0.0109,
+              "neutral": 0.7737,
+              "sadness": 0.0783,
+              "surprise": 0.0134
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "fixing",
+          "keywords": [
+            "fixing"
+          ],
+          "similarity_to_previous": 0.0,
+          "is_shift": false
+        },
+        "acoustic": {
+          "pitch_hz": 1432.7,
+          "rms_db": -25.45,
+          "speech_rate_wps": 1.16,
+          "duration_seconds": 1.72,
+          "energy_delta_db": 54.55,
+          "pitch_delta_hz": null,
+          "speech_rate_delta_wps": 1.16
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      },
+      {
+        "timestamp_start": 19.22,
+        "timestamp_end": 20.5,
+        "start": 19.22,
+        "end": 20.5,
+        "text": "I feel much better now.",
+        "emotion": "joy",
+        "intensity": 0.8424,
+        "modalities": {
+          "audio": {
+            "emotion": "joy",
+            "confidence": 0.8781,
+            "scores": {
+              "anger": 0.0022,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.8781,
+              "neutral": 0.1177,
+              "sadness": 0.002,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "joy",
+            "confidence": 0.7988,
+            "scores": {
+              "anger": 0.0049,
+              "disgust": 0.031297,
+              "fear": 0.0033,
+              "joy": 0.79872,
+              "neutral": 0.113089,
+              "sadness": 0.044196,
+              "surprise": 0.0045
+            }
+          },
+          "fused": {
+            "emotion": "joy",
+            "confidence": 0.8424,
+            "scores": {
+              "anger": 0.0034,
+              "disgust": 0.0141,
+              "fear": 0.0015,
+              "joy": 0.8424,
+              "neutral": 0.1156,
+              "sadness": 0.021,
+              "surprise": 0.002
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "feel better / feel",
+          "keywords": [
+            "feel better",
+            "feel",
+            "better"
+          ],
+          "similarity_to_previous": 0.0,
+          "is_shift": true
+        },
+        "acoustic": {
+          "pitch_hz": 1361.1,
+          "rms_db": -17.62,
+          "speech_rate_wps": 3.91,
+          "duration_seconds": 1.28,
+          "energy_delta_db": 7.83,
+          "pitch_delta_hz": -71.6,
+          "speech_rate_delta_wps": 2.75
+        },
+        "trigger_phrase": "I feel much better now.",
+        "cause": "The emotion changes from neutral to joy, as the topic moves from fixing to feel better / feel, with matching vocal and textual evidence, and rising vocal energy, with lower pitch, and faster speech.",
+        "cause_source": "deterministic-fallback"
+      },
+      {
+        "timestamp_start": 20.0,
+        "timestamp_end": 21.0,
+        "start": 20.0,
+        "end": 21.0,
+        "text": "better now.",
+        "emotion": "joy",
+        "intensity": 0.5684,
+        "modalities": {
+          "audio": {
+            "emotion": "joy",
+            "confidence": 0.9958,
+            "scores": {
+              "anger": 0.0,
+              "disgust": 0.0,
+              "fear": 0.0,
+              "joy": 0.9959,
+              "neutral": 0.003,
+              "sadness": 0.0011,
+              "surprise": 0.0
+            }
+          },
+          "text": {
+            "emotion": "neutral",
+            "confidence": 0.8231,
+            "scores": {
+              "anger": 0.062,
+              "disgust": 0.0411,
+              "fear": 0.0035,
+              "joy": 0.0458,
+              "neutral": 0.8231,
+              "sadness": 0.0146,
+              "surprise": 0.0099
+            }
+          },
+          "fused": {
+            "emotion": "joy",
+            "confidence": 0.5684,
+            "scores": {
+              "anger": 0.0279,
+              "disgust": 0.0185,
+              "fear": 0.0016,
+              "joy": 0.5684,
+              "neutral": 0.372,
+              "sadness": 0.0072,
+              "surprise": 0.0045
+            },
+            "audio_weight": 0.55,
+            "text_weight": 0.45
+          }
+        },
+        "topic": {
+          "label": "better",
+          "keywords": [
+            "better"
+          ],
+          "similarity_to_previous": 0.5232,
+          "is_shift": false
+        },
+        "acoustic": {
+          "pitch_hz": 1209.6,
+          "rms_db": -21.69,
+          "speech_rate_wps": 2.0,
+          "duration_seconds": 1.0,
+          "energy_delta_db": -4.07,
+          "pitch_delta_hz": -151.5,
+          "speech_rate_delta_wps": -1.91
+        },
+        "trigger_phrase": null,
+        "cause": null,
+        "cause_source": null
+      }
+    ],
+    "transcript": [
+      {
+        "start": 0.0,
+        "end": 2.88,
+        "text": "I called to ask about the status of my order.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 2.5,
+        "end": 3.5,
+        "text": "order.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 3.5,
+        "end": 5.5,
+        "text": "Everything seemed normal at first.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 5.0,
+        "end": 6.8,
+        "text": "at first.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 6.8,
+        "end": 7.96,
+        "text": "The delivery is now 2.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 7.5,
+        "end": 10.46,
+        "text": "now two weeks late and nobody has explained the delay.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 10.0,
+        "end": 11.6,
+        "text": "delay.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 11.6,
+        "end": 12.84,
+        "text": "This is not acceptable.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 12.5,
+        "end": 15.5,
+        "text": "I need to speak to your manager.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 15.0,
+        "end": 17.0,
+        "text": "manager today.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 17.0,
+        "end": 18.0,
+        "text": "Thank you for fixing",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 18.0,
+        "end": 19.0,
+        "text": "//",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 17.5,
+        "end": 19.22,
+        "text": "fixing it.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 19.22,
+        "end": 20.5,
+        "text": "I feel much better now.",
+        "speaker": "Speaker 1"
+      },
+      {
+        "start": 20.0,
+        "end": 21.0,
+        "text": "better now.",
+        "speaker": "Speaker 1"
+      }
+    ],
+    "transitions": [
+      {
+        "from_segment": 12,
+        "to_segment": 13,
+        "from_emotion": "neutral",
+        "to_emotion": "joy",
+        "explanation": "The emotion changes from neutral to joy, as the topic moves from fixing to feel better / feel, with matching vocal and textual evidence, and rising vocal energy, with lower pitch, and faster speech.",
+        "driver": "topic"
+      }
+    ],
+    "model_tier": "fast",
+    "processing_time_ms": 26155,
+    "stage_timings": {
+      "asr_time_ms": 2871.1,
+      "emotion_time_ms": 1409.1,
+      "local_causality_time_ms": 1505.6999999999998
+    },
+    "model_provenance": {
+      "asr": "faster-whisper/base.en",
+      "audio_emotion": "superb/wav2vec2-base-superb-er",
+      "text_emotion": "j-hartmann/emotion-english-distilroberta-base",
+      "fusion": "weighted-audio-0.55-text-0.45",
+      "causality": "Qwen/Qwen3-0.6B with deterministic fallback",
+      "external_inference": false
+    }
+  }
+}

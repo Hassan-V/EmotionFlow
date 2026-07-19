@@ -21,8 +21,9 @@ class Settings(BaseSettings):
     ALLOWED_AUDIO_TYPES: list[str] = ["audio/mpeg", "audio/wav", "audio/x-wav", "audio/mp4", "audio/flac", "audio/x-flac"]
     ALLOWED_EXTENSIONS: list[str] = [".mp3", ".wav", ".m4a", ".flac"]
 
-    # AI / Gemini
-    GEMINI_API_KEY: str = ""
+    # Fully local inference
+    LOCAL_CAUSAL_MODEL: str = "Qwen/Qwen3-0.6B"
+    LOCAL_MODELS_ONLY: bool = True
 
     # Environment
     ENVIRONMENT: str = "development"

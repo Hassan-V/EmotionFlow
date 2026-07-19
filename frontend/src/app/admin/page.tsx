@@ -64,12 +64,13 @@ export default function AdminPage() {
       )}
 
       {/* Stats grid */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         <StatCard label="Total users" value={tel.total_users} icon={<Users className="w-5 h-5" />} />
         <StatCard label="Active today" value={tel.active_users_today} icon={<Activity className="w-5 h-5" />} />
         <StatCard label="Requests (last hr)" value={tel.requests_last_hour} icon={<Zap className="w-5 h-5" />} />
+        <StatCard label="API latency p95" value={formatMs(tel.p95_api_latency_ms)} icon={<Clock className="w-5 h-5" />} />
         <StatCard
-          label="Avg processing"
+          label="Avg job processing"
           value={tel.avg_processing_time_ms ? formatMs(tel.avg_processing_time_ms) : "—"}
           icon={<Clock className="w-5 h-5" />}
         />
@@ -119,6 +120,14 @@ export default function AdminPage() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-zinc-400">Total requests</span>
               <span className="font-medium">{tel.total_requests.toLocaleString()}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-zinc-400">Average API latency</span>
+              <span className="font-medium">{formatMs(tel.avg_api_latency_ms)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-zinc-400">API errors (last hour)</span>
+              <span className={tel.api_errors_last_hour ? "font-medium text-red-400" : "font-medium text-emerald-400"}>{tel.api_errors_last_hour}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-zinc-400">Total users</span>

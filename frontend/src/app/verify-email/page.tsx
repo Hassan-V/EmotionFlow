@@ -9,13 +9,11 @@ import { Zap, CheckCircle, XCircle, Loader2 } from "lucide-react";
 function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"loading" | "success" | "error">(token ? "loading" : "error");
+  const [message, setMessage] = useState(token ? "" : "Missing verification token");
 
   useEffect(() => {
     if (!token) {
-      setStatus("error");
-      setMessage("Missing verification token");
       return;
     }
 

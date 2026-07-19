@@ -202,8 +202,7 @@ def print_comparison(all_results):
                 print(f"{val:>16.1f}", end="")
         print()
 
-    # Gemini API costs (not tested here, fixed cost)
-    print(f"\n+ Gemini 2.5 Flash API: ~$0.15/1M input tokens, ~$0.60/1M output tokens")
+    print("\n+ External inference API cost: $0 (all models run locally)")
     print(f"  (~$0.001-0.003 per analysis depending on transcript length)")
     print(f"\nNote: GPU costs based on AWS g4dn.xlarge ($0.526/hr, T4 GPU)")
     print(f"      Your GTX 1660 Super = free (local), similar perf to T4")

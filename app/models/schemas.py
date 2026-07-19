@@ -126,6 +126,11 @@ class EmotionShift(BaseModel):
     intensity: float = Field(ge=0.0, le=1.0)
     trigger_phrase: Optional[str] = None
     cause: Optional[str] = None
+    cause_source: Optional[str] = None
+    text: Optional[str] = None
+    modalities: dict = Field(default_factory=dict)
+    topic: dict = Field(default_factory=dict)
+    acoustic: dict = Field(default_factory=dict)
 
 
 class TranscriptSegment(BaseModel):
@@ -141,6 +146,7 @@ class EmotionTransition(BaseModel):
     from_emotion: str
     to_emotion: str
     explanation: str
+    driver: Optional[str] = None
 
 
 class AnalysisResult(BaseModel):
@@ -150,9 +156,11 @@ class AnalysisResult(BaseModel):
     summary: Optional[str] = None
     timeline: list[EmotionShift]
     transcript: list[TranscriptSegment]
-    transitions: list[EmotionTransition] = []
+    transitions: list[EmotionTransition] = Field(default_factory=list)
     model_tier: str
     processing_time_ms: float
+    model_provenance: dict = Field(default_factory=dict)
+    stage_timings: dict = Field(default_factory=dict)
 
 
 class JobSubmitResponse(BaseModel):
@@ -188,6 +196,9 @@ class TelemetrySummary(BaseModel):
     avg_processing_time_ms: Optional[float]
     error_rate_percent: float
     requests_last_hour: int
+    avg_api_latency_ms: float = 0.0
+    p95_api_latency_ms: float = 0.0
+    api_errors_last_hour: int = 0
 
 
 class UserAdminView(BaseModel):

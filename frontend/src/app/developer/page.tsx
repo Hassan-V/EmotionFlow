@@ -246,6 +246,16 @@ function AnalysisSection() {
   "message": "Analysis queued with 'balanced' tier."
 }`} />
 
+      <SubHeading>Stream an HTTP request body</SubHeading>
+      <P>
+        Clients that cannot use multipart forms may stream WAV or MP3 bytes with
+        chunked HTTP transfer. The response uses the same job and JSON result contract.
+      </P>
+      <CodeBlock lang="bash" code={`curl -X POST "https://dev.emotionflow.site/analysis/analyze-stream?filename=meeting.wav&model_tier=fast" \\
+  -H "Authorization: Bearer $TOKEN" \\
+  -H "Content-Type: audio/wav" \\
+  --data-binary @meeting.wav`} />
+
       <SubHeading>Poll for result</SubHeading>
       <CodeBlock lang="bash" code={`curl https://dev.emotionflow.site/analysis/jobs/550e8400-... \\
   -H "Authorization: Bearer $TOKEN"
@@ -296,19 +306,18 @@ function AnalysisSection() {
         partial transcript and emotion events as they are processed.
       </P>
       <CodeBlock lang="javascript" code={`const ws = new WebSocket(
-  \`wss://dev.emotionflow.site/analysis/stream?token=\${accessToken}\`
+  \`wss://emotionflow.site/ws/stream?token=\${accessToken}\`
 );
 
 ws.onopen = () => {
   // 1. Send config first
-  ws.send(JSON.stringify({ type: "config", model_tier: "fast" }));
-
-  // 2. Send audio chunks as base64
   ws.send(JSON.stringify({
-    type: "audio_chunk",
-    data: btoa(arrayBuffer),   // base64-encoded audio/webm
-    format: "webm"
+    type: "config", tier: "fast", session_id: crypto.randomUUID(),
+    encoding: "pcm_s16le", sample_rate: 16000, chunk_ms: 250
   }));
+
+  // 2. Send each 250 ms AudioWorklet PCM16 ArrayBuffer as binary
+  ws.send(pcm16ArrayBuffer);
 
   // 3. Signal end of stream
   ws.send(JSON.stringify({ type: "end_stream" }));
@@ -316,15 +325,16 @@ ws.onopen = () => {
 
 ws.onmessage = ({ data }) => {
   const msg = JSON.parse(data);
-  // msg.type: "transcript" | "emotion" | "causality" | "done" | "error"
+  // connected | status | transcript | emotion | causality | final_result | error
 };`} />
 
       <SubHeading>Endpoints</SubHeading>
       <div className="rounded-xl border border-zinc-800 overflow-hidden px-4 py-1 bg-zinc-900/40">
         <Endpoint method="POST" path="/analysis/analyze-file" desc="Submit audio file for async analysis" />
+        <Endpoint method="POST" path="/analysis/analyze-stream" desc="Stream a raw WAV/MP3 HTTP body for async analysis" />
         <Endpoint method="GET"  path="/analysis/jobs/{job_id}" desc="Get job status and result" />
         <Endpoint method="GET"  path="/analysis/jobs" desc="List all jobs for the current user" />
-        <Endpoint method="WS"   path="/analysis/stream?token=..." desc="Real-time WebSocket streaming" />
+        <Endpoint method="WS"   path="/ws/stream?token=..." desc="Binary PCM16 live streaming" />
       </div>
     </section>
   );
