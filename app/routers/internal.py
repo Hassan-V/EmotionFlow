@@ -13,7 +13,6 @@ UPLOAD_DIR = settings.UPLOAD_DIR or os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "uploads"
 )
 
-
 @router.get("/files/{filename}")
 async def download_file_for_worker(
     filename: str,

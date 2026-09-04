@@ -1,0 +1,102 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: emotionflow-vps-api
+    ports:
+      - "127.0.0.1:18000:8000"
+      - "${TAILSCALE_IP}:8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://emotionflow:${DB_PASSWORD}@postgres:5432/emotionflow
+      - SYNC_DATABASE_URL=postgresql+psycopg2://emotionflow:${DB_PASSWORD}@postgres:5432/emotionflow
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - REFRESH_TOKEN_EXPIRE_DAYS=7
+      - MAX_UPLOAD_SIZE_MB=50
+      - LOCAL_MODELS_ONLY=true
+      - WORKER_SECRET=${WORKER_SECRET}
+      - ENVIRONMENT=production
+      - FRONTEND_URL=https://${DOMAIN}
+      - CORS_ORIGINS=https://${DOMAIN},https://www.${DOMAIN},https://dev.${DOMAIN}
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - EMAIL_FROM=${EMAIL_FROM:-EmotionFlow <noreply@emotionflow.site>}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+    volumes:
+      - emotionflow_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks: [emotionflow]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=https://${DOMAIN}/api-backend
+        - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+        - NEXT_PUBLIC_GOOGLE_MEET_PROJECT_NUMBER=${GOOGLE_MEET_PROJECT_NUMBER:-}
+    container_name: emotionflow-vps-frontend
+    ports:
+      - "127.0.0.1:13000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=https://${DOMAIN}/api-backend
+      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - NEXT_PUBLIC_GOOGLE_MEET_PROJECT_NUMBER=${GOOGLE_MEET_PROJECT_NUMBER:-}
+      - NODE_ENV=production
+    depends_on: [api]
+    restart: unless-stopped
+    networks: [emotionflow]
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: emotionflow-vps-postgres
+    ports:
+      - "${TAILSCALE_IP}:5433:5432"
+    environment:
+      - POSTGRES_USER=emotionflow
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=emotionflow
+    volumes:
+      - emotionflow_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U emotionflow -d emotionflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks: [emotionflow]
+
+  redis:
+    image: redis:7-alpine
+    container_name: emotionflow-vps-redis
+    ports:
+      - "${TAILSCALE_IP}:6380:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: ["sh", "-c", "redis-server --appendonly yes --requirepass \"$$REDIS_PASSWORD\""]
+    volumes:
+      - emotionflow_redis:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" --no-auth-warning ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks: [emotionflow]
+
+networks:
+  emotionflow:
+    name: emotionflow-vps
+
+volumes:
+  emotionflow_uploads:
+  emotionflow_postgres:
+  emotionflow_redis:

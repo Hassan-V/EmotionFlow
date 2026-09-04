@@ -1,7 +1,7 @@
 """
 Session Memory Service — Redis-backed conversation context persistence.
 
-Stores session context so Gemini can maintain awareness across multiple
+Stores session context so the local causal engine can maintain awareness across multiple
 analysis requests within the same conversation / user session.
 
 Storage model:
@@ -9,7 +9,7 @@ Storage model:
   - Value: JSON with rolling context (summary of previous analyses)
   - TTL: 24 hours by default (configurable)
 
-This allows long conversations to build up context that Gemini references
+This allows long conversations to build up context that the local engine references
 when explaining emotional causality, detecting patterns, and tracking
 emotional arcs across multiple audio submissions.
 """
@@ -37,7 +37,7 @@ def get_session_context(
     session_id: str,
 ) -> Optional[str]:
     """
-    Retrieve the accumulated session context for Gemini.
+    Retrieve the accumulated local session context.
 
     Returns a formatted string of previous analysis summaries,
     or None if no session exists.
@@ -76,7 +76,7 @@ def append_to_session(
         redis_client: Sync redis client
         user_id: Owner user ID
         session_id: Session identifier (from client or job)
-        summary: Text summary from gemini_service.build_session_summary()
+        summary: Text summary from local_causality_service.build_session_summary()
         metadata: Optional extra data (job_id, filename, etc.)
         ttl_seconds: Time-to-live for the session
     """

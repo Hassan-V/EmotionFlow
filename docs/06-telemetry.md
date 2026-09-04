@@ -52,13 +52,13 @@ After every job (success or failure) the worker pushes:
 | `model_tier` | `"balanced"` |
 | `asr_time_ms` | `"1843"` |
 | `emotion_time_ms` | `"412"` |
-| `gemini_time_ms` | `"3201"` |
+| `local_causality_time_ms` | `"118"` |
 | `total_ms` | `"17344"` |
 | `status` | `"completed"` or `"failed"` |
 | `ts` | ISO-8601 timestamp |
 
-This data answers questions like *"which tier is the bottleneck?"* and *"is Gemini latency
-degrading?"*.
+This data answers questions like *"which tier is the bottleneck?"* and *"is local explanation
+latency degrading?"*.
 
 **Admin endpoint**: `GET /admin/jobs/stats`
 
@@ -71,11 +71,26 @@ Simple Redis `INCR` counters updated inline (no stream overhead):
 | Redis key | Meaning |
 |---|---|
 | `telemetry:total_requests` | Lifetime request count |
-| `telemetry:error_count` | Lifetime 4xx/5xx count |
+| `telemetry:error_count` | Lifetime server-error (5xx) count |
 | `telemetry:user:{id}:requests` | Per-user lifetime request count |
 
-**Admin endpoint**: `GET /admin/telemetry` returns derived metrics (error rate %, requests
-last hour, avg processing time, etc.).
+**Admin endpoint**: `GET /admin/telemetry` returns derived metrics including
+overall error rate, hourly error count, hourly request count, average API
+latency, p95 API latency, and average job processing time.
+
+---
+
+## Usage and Quota Tracking
+
+- Every accepted file or raw HTTP stream job increments the authenticated
+  user's `quota_used_today` under a database row lock.
+- `quota_reset_at` stores the next UTC midnight boundary. The first request
+  after that boundary atomically resets daily usage before applying the limit.
+- API-key usage count and last-used time are updated on authentication.
+- Completed/failed worker attempts are recorded in the immutable billing ledger
+  with compute units, duration, and processing time.
+- Users see their current quota on the dashboard; administrators can inspect and
+  change quotas from the user-management view.
 
 ---
 
@@ -96,8 +111,8 @@ When an exception escapes all route handlers:
 ## Rate Limit Events
 
 `RateLimitMiddleware` returns `429` before any route handler runs. These 429 responses are
-recorded like any other request in `telemetry:api_logs` (status_code = `"429"`). The global
-error counter is also incremented (since 429 ≥ 400).
+recorded like any other request in `telemetry:api_logs` (status_code = `"429"`).
+They do not inflate the server-error counter, which is reserved for 5xx failures.
 
 ---
 

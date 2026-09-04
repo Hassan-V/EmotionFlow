@@ -83,7 +83,6 @@ def test_with_iemocap():
         model_tier="fast",
         user_id=0,
         session_id="iemocap-test",
-        gemini_api_key=settings.GEMINI_API_KEY,
         redis_client=r,
     )
     elapsed = time.perf_counter() - t0

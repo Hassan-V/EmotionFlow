@@ -1,0 +1,20 @@
+[Unit]
+Description=EmotionFlow RTX queued file inference worker
+After=network-online.target emotionflow-live-worker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/happy/emotionflow-rtx5070
+EnvironmentFile=/home/happy/emotionflow-rtx5070/.env.worker.local
+Environment=LOCAL_CAUSAL_MODEL=Qwen/Qwen3-1.7B
+Environment=LOCAL_CAUSAL_TIMEOUT_SECONDS=4.0
+Environment=LOCAL_CAUSAL_MAX_NEW_TOKENS=72
+Environment=LD_LIBRARY_PATH=/usr/lib/wsl/lib:/home/happy/emotionflow-rtx5070/.venv/lib/python3.12/site-packages/nvidia/cublas/lib:/home/happy/emotionflow-rtx5070/.venv/lib/python3.12/site-packages/nvidia/cudnn/lib
+ExecStart=/home/happy/emotionflow-rtx5070/.venv/bin/python -m app.services.worker
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target

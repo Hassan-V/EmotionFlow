@@ -16,11 +16,8 @@ logger = logging.getLogger("emotionflow.emotion")
 
 TIER_MODEL_MAP = {
     "fast": ["j-hartmann/emotion-english-distilroberta-base"],
-    "balanced": ["SamLowe/roberta-base-go_emotions"],
-    "max": [
-        "j-hartmann/emotion-english-distilroberta-base",
-        "SamLowe/roberta-base-go_emotions",
-    ],
+    "balanced": ["j-hartmann/emotion-english-distilroberta-base"],
+    "max": ["j-hartmann/emotion-english-distilroberta-base"],
 }
 
 # Module-level cache
@@ -48,6 +45,7 @@ def load_classifier(model_name: str) -> Pipeline:
         device=device,
         truncation=True,
         max_length=512,
+        local_files_only=True,
     )
 
     elapsed = time.perf_counter() - t0
@@ -71,7 +69,7 @@ def classify_segment(text: str, tier: str = "balanced") -> dict:
     """
     model_names = TIER_MODEL_MAP.get(tier, TIER_MODEL_MAP["balanced"])
 
-    if tier == "max" and len(model_names) > 1:
+    if len(model_names) > 1:
         return _ensemble_classify(text, model_names)
 
     model_name = model_names[0]

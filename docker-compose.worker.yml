@@ -4,7 +4,7 @@
 # Prerequisites:
 #   1. NVIDIA Container Toolkit installed: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
 #   2. Tailscale running and connected to the same tailnet as the VPS
-#   3. .env file with VPS Tailscale IP, DB creds, WORKER_SECRET, GEMINI_API_KEY
+#   3. .env file with VPS Tailscale IP, DB creds, WORKER_SECRET, REDIS_PASSWORD
 #
 # Usage:
 #   docker compose -f docker-compose.worker.yml up -d
@@ -22,8 +22,9 @@ services:
       - REDIS_URL=${REDIS_URL}
       - API_BASE_URL=${API_BASE_URL}
       - WORKER_SECRET=${WORKER_SECRET}
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - LOCAL_MODELS_ONLY=true
       - MODEL_TIER=${MODEL_TIER:-balanced}
+      - GPU_RESOURCE_ID=${GPU_RESOURCE_ID:-rtx5070}
     volumes:
       - model_cache:/root/.cache
     deploy:
@@ -35,6 +36,29 @@ services:
               capabilities: [gpu]
     restart: unless-stopped
     # Worker accesses VPS via host network (Tailscale)
+    network_mode: host
+
+  live-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: emotionflow-live-worker
+    command: ["python", "-m", "app.services.live_worker"]
+    env_file: .env
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - LOCAL_MODELS_ONLY=true
+      - GPU_RESOURCE_ID=${GPU_RESOURCE_ID:-rtx5070}
+    volumes:
+      - model_cache:/root/.cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
     network_mode: host
 
 volumes:

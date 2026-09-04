@@ -43,10 +43,6 @@ const EDGE_MIN = 1.5;
 const EDGE_MAX = 6;
 
 /* ─── Helpers ───────────────────────────────────────────────────── */
-function clamp(v: number, lo: number, hi: number) {
-  return Math.min(Math.max(v, lo), hi);
-}
-
 /** Perpendicular-offset control point for a quadratic bezier */
 function ctrlPt(
   x1: number, y1: number, x2: number, y2: number, off: number,
@@ -124,7 +120,7 @@ export function CausalityGraph({ timeline, transitions, summary }: Props) {
     const edgeMap = new Map<string, { from: string; to: string; count: number; explanations: string[] }>();
 
     if (transitions && transitions.length > 0) {
-      // Use Gemini transitions + infer from timeline
+      // Use local grounded transitions + infer from timeline
       for (const t of transitions) {
         if (t.from_emotion === t.to_emotion) continue;
         const key = `${t.from_emotion}->${t.to_emotion}`;
@@ -453,7 +449,7 @@ export function CausalityGraph({ timeline, transitions, summary }: Props) {
         </div>
       )}
 
-      {/* ── Gemini summary ───────────────────────── */}
+      {/* ── Local summary ────────────────────────── */}
       {summary && (
         <p className="text-sm text-zinc-400 mt-3 px-2 italic leading-relaxed">
           {summary}

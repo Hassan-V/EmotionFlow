@@ -10,11 +10,11 @@
 services:
   # Override: don't expose API directly in prod — Nginx handles it
   api:
-    ports: []
+    ports:
+      - "${TAILSCALE_IP}:8000:8000"
     environment:
       - ENVIRONMENT=production
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - DATABASE_URL=postgresql+asyncpg://emotionflow:${DB_PASSWORD}@postgres:5432/emotionflow
       - SYNC_DATABASE_URL=postgresql+psycopg2://emotionflow:${DB_PASSWORD}@postgres:5432/emotionflow
       - RESEND_API_KEY=${RESEND_API_KEY:-}
@@ -31,9 +31,13 @@ services:
     profiles:
       - local-worker   # only start if explicitly requested
 
+  live-worker:
+    profiles:
+      - local-worker
+
   postgres:
     ports:
-      - "5433:5432"  # keep for Tailscale worker access
+      - "${TAILSCALE_IP}:5433:5432"
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
@@ -48,7 +52,7 @@ services:
 
   redis:
     ports:
-      - "6380:6379"  # keep for Tailscale worker access
+      - "${TAILSCALE_IP}:6380:6379"
 
   # Next.js frontend
   frontend:
@@ -58,10 +62,12 @@ services:
       args:
         - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
         - NEXT_PUBLIC_API_URL=https://${DOMAIN}/api-backend
+        - NEXT_PUBLIC_GOOGLE_MEET_PROJECT_NUMBER=${GOOGLE_MEET_PROJECT_NUMBER:-}
     container_name: emotionflow-frontend
     environment:
       - NEXT_PUBLIC_API_URL=https://${DOMAIN}/api-backend
       - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - NEXT_PUBLIC_GOOGLE_MEET_PROJECT_NUMBER=${GOOGLE_MEET_PROJECT_NUMBER:-}
       - NODE_ENV=production
     restart: unless-stopped
     networks:

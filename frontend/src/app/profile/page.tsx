@@ -14,7 +14,7 @@ import { CheckCircle2 } from "lucide-react";
 const TIERS = [
   { ...TIER_INFO.fast, id: "fast", quota: 50, desc: "50 analyses/day, basic sentiment" },
   { ...TIER_INFO.balanced, id: "balanced", quota: 100, desc: "100 analyses/day, full analysis", current: true },
-  { ...TIER_INFO.max, id: "max", quota: 500, desc: "500 analyses/day, Gemini causality, priority queue" },
+  { ...TIER_INFO.max, id: "max", quota: 500, desc: "500 analyses/day, local causality, priority queue" },
 ];
 
 export default function ProfilePage() {

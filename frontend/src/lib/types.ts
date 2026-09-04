@@ -32,6 +32,21 @@ export interface EmotionShift {
   intensity: number;
   trigger_phrase: string | null;
   cause: string | null;
+  cause_source?: "qwen3-0.6b" | "qwen3-1.7b" | "deterministic-fallback" | null;
+  text?: string;
+  modalities?: {
+    audio: ModalityResult;
+    text: ModalityResult;
+    fused: ModalityResult & { audio_weight: number; text_weight: number };
+  };
+  topic?: { label: string; keywords: string[]; similarity_to_previous: number; is_shift: boolean };
+  acoustic?: { pitch_hz: number | null; rms_db: number; speech_rate_wps: number; duration_seconds: number; energy_delta_db?: number | null; pitch_delta_hz?: number | null; speech_rate_delta_wps?: number | null };
+}
+
+export interface ModalityResult {
+  emotion: string;
+  confidence: number;
+  scores: Record<string, number>;
 }
 
 export interface EmotionTransition {
@@ -40,6 +55,7 @@ export interface EmotionTransition {
   from_emotion: string;
   to_emotion: string;
   explanation: string;
+  driver?: "topic" | "tone" | "mixed";
 }
 
 export interface TranscriptSegment {
@@ -59,6 +75,8 @@ export interface AnalysisResult {
   transitions?: EmotionTransition[];
   model_tier: ModelTier;
   processing_time_ms: number;
+  model_provenance?: Record<string, string | boolean | null>;
+  stage_timings?: Record<string, number>;
 }
 
 export interface JobSubmitResponse {
@@ -137,6 +155,9 @@ export interface TelemetrySummary {
   avg_processing_time_ms: number | null;
   error_rate_percent: number;
   requests_last_hour: number;
+  avg_api_latency_ms: number;
+  p95_api_latency_ms: number;
+  api_errors_last_hour: number;
 }
 
 export interface UserAdminView {

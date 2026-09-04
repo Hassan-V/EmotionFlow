@@ -3,8 +3,8 @@
 ## Overview
 
 EmotionFlow includes a **simulated billing layer** that tracks API usage costs per user and
-per tier. No real payment processing occurs — this models how a commercial SaaS API (like
-Google Gemini or OpenAI APIs) would track and present costs.
+per tier. No real payment processing occurs — this models how a commercial inference service
+would allocate local compute costs.
 
 ---
 

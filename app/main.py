@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from sqlalchemy import text
 
 from app.core.config import get_settings
 from app.core.database import engine, Base
@@ -32,6 +33,34 @@ async def lifespan(app: FastAPI):
     logger.info("Creating database tables...")
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # Idempotent compatibility migration for databases created before auth v2.
+        await conn.execute(text(
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_verified BOOLEAN NOT NULL DEFAULT false"
+        ))
+        await conn.execute(text(
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_test_account BOOLEAN NOT NULL DEFAULT false"
+        ))
+        await conn.execute(text(
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255)"
+        ))
+        await conn.execute(text(
+            "CREATE UNIQUE INDEX IF NOT EXISTS ix_users_google_id ON users (google_id)"
+        ))
+        await conn.execute(text(
+            "ALTER TABLE billing_events ADD COLUMN IF NOT EXISTS compute_units INTEGER NOT NULL DEFAULT 0"
+        ))
+        # Legacy deployments used a mandatory cost_usd column. Keep it
+        # readable, but give new compute-unit ledger writes a safe default.
+        await conn.execute(text("""
+            DO $$ BEGIN
+                IF EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'billing_events' AND column_name = 'cost_usd'
+                ) THEN
+                    ALTER TABLE billing_events ALTER COLUMN cost_usd SET DEFAULT 0.0;
+                END IF;
+            END $$
+        """))
     logger.info("Database tables ready.")
 
     # Verify Redis connection
@@ -136,9 +165,11 @@ async def health_check():
 
     # Check Redis
     redis_ok = False
+    live_workers = 0
     try:
         await redis_client.ping()
         redis_ok = True
+        live_workers = len(await redis_client.keys("live-worker:heartbeat:*"))
     except Exception:
         pass
 
@@ -147,5 +178,6 @@ async def health_check():
         "status": status,
         "database": "ok" if db_ok else "unavailable",
         "redis": "ok" if redis_ok else "unavailable",
+        "live_workers_ready": live_workers,
         "version": "1.0.0",
     }

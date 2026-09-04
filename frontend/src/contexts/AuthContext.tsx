@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { authApi, clearTokens, loadTokensFromStorage } from "@/lib/api";
+import { authApi, clearTokens, ensureFreshAccessToken } from "@/lib/api";
 import type { User } from "@/lib/types";
 
 interface AuthState {
@@ -20,7 +20,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refresh = useCallback(async () => {
     try {
-      loadTokensFromStorage();
+      const token = await ensureFreshAccessToken();
+      if (!token) throw new Error("Authentication required");
       const me = await authApi.me();
       setUser(me);
     } catch {
@@ -30,7 +31,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    refresh().finally(() => setLoading(false));
+    const timeout = window.setTimeout(() => {
+      void refresh().finally(() => setLoading(false));
+    }, 0);
+    return () => window.clearTimeout(timeout);
   }, [refresh]);
 
   const login = async (email: string, password: string) => {

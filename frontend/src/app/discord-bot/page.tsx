@@ -2,7 +2,6 @@
 
 import { AppShell } from "@/components/AppShell";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
 import { MessageSquare, Key, Zap, BookOpen, ExternalLink } from "lucide-react";
 import Link from "next/link";
 

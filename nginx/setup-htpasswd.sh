@@ -1,7 +1,6 @@
 #!/bin/bash
 # Run this once on the VPS to create the basic auth password file for dev.emotionflow.site
-# Usage: sudo bash setup-htpasswd.sh [username] [password]
-#        sudo bash setup-htpasswd.sh dev s3cr3tDevPass
+# Usage: sudo bash setup-htpasswd.sh <username> <password>
 
 set -e
 
